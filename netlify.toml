@@ -5,5 +5,5 @@
     X-Frame-Options = "DENY"
     X-Content-Type-Options = "nosniff"
 
-[[functions]]
+[functions]
   directory = "netlify/functions"
