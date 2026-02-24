@@ -2,7 +2,7 @@
 
 **A working prototype built for the Wealthsimple AI Builders application.**
 
-→ **[View live demo](https://your-site.netlify.app)** *(replace with your Netlify URL)*
+→ **[View live demo](https://wealthsimple-mortgage-ai-prototype.netlify.app)** *(replace with your Netlify URL)*
 
 ---
 
