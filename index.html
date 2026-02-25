@@ -1,0 +1,2965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wealthsimple Mortgage AI</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap');
+
+:root {
+  --black: #111110;
+  --white: #ffffff;
+  --off-white: #f8f7f5;
+  --gray-100: #f3f2f0;
+  --gray-200: #e8e7e4;
+  --gray-300: #d4d2ce;
+  --gray-400: #a8a59f;
+  --gray-500: #7a7771;
+  --gray-700: #3d3c39;
+  --green: #00a67e;
+  --green-light: #e8f7f2;
+  --amber: #d4760c;
+  --amber-light: #fef6ec;
+  --red: #c0392b;
+  --red-light: #fdf0ef;
+  --shadow-sm: 0 1px 2px rgba(17,17,16,0.06);
+  --shadow: 0 2px 8px rgba(17,17,16,0.08), 0 1px 2px rgba(17,17,16,0.04);
+  --shadow-lg: 0 8px 40px rgba(17,17,16,0.10), 0 2px 8px rgba(17,17,16,0.06);
+  --radius: 12px;
+  --radius-sm: 8px;
+  --radius-xs: 4px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--white);
+  color: var(--black);
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  font-size: 15px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── SCREEN SYSTEM ─── */
+.screen { display: none; min-height: 100vh; flex-direction: column; }
+.screen.active { display: flex; }
+
+/* ─── GLOBAL NAV ─── */
+.nav {
+  height: 56px;
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  justify-content: space-between;
+  background: var(--white);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.nav-logo {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: -0.2px;
+  color: var(--black);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-logo-ws {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--black);
+}
+
+.nav-logo-sep {
+  color: var(--gray-300);
+  font-weight: 300;
+}
+
+.nav-logo-product {
+  color: var(--gray-500);
+  font-weight: 400;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.nav-broker-btn {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--black);
+  background: none;
+  border: 1px solid var(--gray-200);
+  border-radius: 20px;
+  padding: 7px 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.nav-broker-btn:hover {
+  border-color: var(--black);
+  background: var(--off-white);
+}
+
+/* ─── BUTTONS ─── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--black);
+  color: var(--white);
+  padding: 12px 24px;
+}
+
+.btn-primary:hover { background: var(--gray-700); }
+.btn-primary:disabled { background: var(--gray-300); cursor: not-allowed; }
+
+.btn-secondary {
+  background: var(--white);
+  color: var(--black);
+  border: 1px solid var(--gray-200);
+  padding: 12px 24px;
+}
+
+.btn-secondary:hover { border-color: var(--black); background: var(--off-white); }
+
+.btn-full { width: 100%; }
+
+.btn-lg { font-size: 15px; padding: 14px 28px; }
+
+/* ─── LANDING ─── */
+#screen-landing {
+  background: var(--white);
+}
+
+.landing-hero {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 80px 24px 64px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.landing-text {}
+
+.landing-kicker {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--gray-500);
+  margin-bottom: 20px;
+}
+
+.landing-h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(38px, 4.5vw, 56px);
+  font-weight: 400;
+  line-height: 1.1;
+  letter-spacing: -0.5px;
+  color: var(--black);
+  margin-bottom: 20px;
+}
+
+.landing-h1 em {
+  font-style: italic;
+  color: var(--gray-500);
+}
+
+.landing-body {
+  font-size: 16px;
+  color: var(--gray-500);
+  line-height: 1.7;
+  margin-bottom: 36px;
+  max-width: 380px;
+}
+
+.landing-ctas {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.landing-notice {
+  margin-top: 24px;
+  font-size: 12px;
+  color: var(--gray-400);
+  line-height: 1.6;
+  max-width: 380px;
+}
+
+/* Right panel */
+.landing-panel {
+  background: var(--off-white);
+  border: 1px solid var(--gray-200);
+  border-radius: 16px;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.panel-stat {
+  padding: 20px;
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gray-200);
+}
+
+.panel-stat-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 32px;
+  font-weight: 400;
+  color: var(--black);
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.panel-stat-label {
+  font-size: 12px;
+  color: var(--gray-500);
+}
+
+.panel-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.panel-step {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.panel-step-num {
+  width: 24px;
+  height: 24px;
+  background: var(--black);
+  color: var(--white);
+  border-radius: 50%;
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.panel-step-text {
+  font-size: 13px;
+  color: var(--gray-700);
+  line-height: 1.5;
+}
+
+.panel-step-text strong { color: var(--black); }
+
+/* ─── CHAT ─── */
+#screen-chat {
+  height: 100vh;
+  overflow: hidden;
+}
+
+.chat-layout {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 56px);
+}
+
+.chat-progress-bar {
+  height: 2px;
+  background: var(--gray-200);
+  position: relative;
+}
+
+.chat-progress-fill {
+  height: 100%;
+  background: var(--black);
+  transition: width 0.5s ease;
+  width: 5%;
+}
+
+.chat-phase {
+  padding: 10px 24px;
+  border-bottom: 1px solid var(--gray-200);
+  font-size: 12px;
+  color: var(--gray-400);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chat-phase-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--green);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.chat-messages {
+  flex: 1;
+  overflow-y: auto;
+  padding: 32px 0;
+  scroll-behavior: smooth;
+}
+
+.chat-messages::-webkit-scrollbar { width: 3px; }
+.chat-messages::-webkit-scrollbar-thumb { background: var(--gray-200); border-radius: 2px; }
+
+.chat-messages-inner {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* Messages */
+.msg {
+  margin-bottom: 16px;
+  animation: msgIn 0.25s ease forwards;
+}
+
+@keyframes msgIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.msg-ai {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.msg-avatar {
+  width: 30px;
+  height: 30px;
+  background: var(--black);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: var(--white);
+  flex-shrink: 0;
+  margin-top: 2px;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.msg-bubble {
+  background: var(--off-white);
+  border: 1px solid var(--gray-200);
+  border-radius: 4px 14px 14px 14px;
+  padding: 14px 18px;
+  font-size: 15px;
+  line-height: 1.65;
+  color: var(--black);
+  max-width: 480px;
+}
+
+.msg-user {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.msg-user .msg-bubble {
+  background: var(--black);
+  color: var(--white);
+  border: none;
+  border-radius: 14px 4px 14px 14px;
+}
+
+/* Options */
+.msg-options {
+  margin-left: 42px;
+  margin-top: -4px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  animation: msgIn 0.3s ease 0.1s both;
+}
+
+.option-pill {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--black);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-weight: 400;
+}
+
+.option-pill:hover {
+  border-color: var(--black);
+  background: var(--off-white);
+}
+
+/* Typing */
+.typing-dots {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  padding: 6px 2px;
+}
+
+.typing-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--gray-400);
+  border-radius: 50%;
+  animation: typingBounce 1.4s infinite;
+}
+
+.typing-dot:nth-child(2) { animation-delay: 0.2s; }
+.typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+  0%, 60%, 100% { transform: translateY(0); }
+  30% { transform: translateY(-5px); }
+}
+
+/* Chat input */
+.chat-input-bar {
+  border-top: 1px solid var(--gray-200);
+  padding: 16px 24px;
+  background: var(--white);
+}
+
+.chat-input-inner {
+  max-width: 600px;
+  margin: 0 auto;
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+
+.chat-textarea {
+  flex: 1;
+  background: var(--off-white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  padding: 11px 16px;
+  font-size: 15px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--black);
+  resize: none;
+  outline: none;
+  min-height: 44px;
+  max-height: 120px;
+  line-height: 1.5;
+  transition: border-color 0.15s;
+}
+
+.chat-textarea:focus { border-color: var(--black); background: var(--white); }
+.chat-textarea::placeholder { color: var(--gray-400); }
+
+.chat-send {
+  width: 44px;
+  height: 44px;
+  background: var(--black);
+  color: var(--white);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: 17px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.chat-send:hover { background: var(--gray-700); }
+.chat-send:disabled { background: var(--gray-300); cursor: not-allowed; }
+
+/* ─── REPORT ─── */
+#screen-report {
+  background: var(--off-white);
+  min-height: 100vh;
+}
+
+.report-nav {
+  background: var(--white);
+  border-bottom: 1px solid var(--gray-200);
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.report-nav-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--black);
+}
+
+.tab-group {
+  display: flex;
+  background: var(--off-white);
+  border: 1px solid var(--gray-200);
+  border-radius: 6px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.tab-btn {
+  font-size: 12px;
+  font-weight: 500;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--gray-500);
+  background: none;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tab-btn.active {
+  background: var(--white);
+  color: var(--black);
+  box-shadow: var(--shadow-sm);
+}
+
+.report-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+/* Disclaimer */
+.disclaimer {
+  background: var(--amber-light);
+  border: 1px solid #f0c080;
+  border-left: 3px solid var(--amber);
+  border-radius: var(--radius-sm);
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  display: flex;
+  gap: 12px;
+}
+
+.disclaimer-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+
+.disclaimer-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--amber);
+  margin-bottom: 3px;
+}
+
+.disclaimer-body {
+  font-size: 12px;
+  color: #9a6010;
+  line-height: 1.65;
+}
+
+/* Cards */
+.card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  margin-bottom: 12px;
+  overflow: hidden;
+}
+
+.card-body { padding: 24px; }
+.card-body-lg { padding: 28px; }
+
+.section-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--gray-400);
+  margin-bottom: 14px;
+}
+
+/* Range card */
+.range-display {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.range-amount {
+  font-family: 'Playfair Display', serif;
+  font-size: 48px;
+  font-weight: 400;
+  color: var(--black);
+  line-height: 1;
+}
+
+.range-span {
+  font-size: 13px;
+  color: var(--gray-400);
+  margin-bottom: 8px;
+}
+
+.range-bar {
+  height: 4px;
+  background: var(--gray-200);
+  border-radius: 2px;
+  margin: 14px 0 10px;
+  overflow: hidden;
+}
+
+.range-bar-fill {
+  height: 100%;
+  background: var(--black);
+  border-radius: 2px;
+  width: 0%;
+  transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.range-bounds {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--gray-400);
+  margin-bottom: 16px;
+}
+
+.range-insight {
+  background: var(--off-white);
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  font-size: 13px;
+  color: var(--gray-700);
+  line-height: 1.6;
+}
+
+/* Ratio grid */
+.ratio-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.ratio-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  padding: 20px;
+}
+
+.ratio-name {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gray-400);
+  margin-bottom: 8px;
+}
+
+.ratio-value {
+  font-family: 'Playfair Display', serif;
+  font-size: 34px;
+  font-weight: 400;
+  color: var(--black);
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.ratio-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  padding: 3px 8px;
+  border-radius: 20px;
+  margin-bottom: 10px;
+}
+
+.pill-good { background: var(--green-light); color: #00805f; }
+.pill-warn { background: #fff5e0; color: #b86a00; }
+.pill-bad { background: var(--red-light); color: var(--red); }
+
+.ratio-track {
+  height: 3px;
+  background: var(--gray-200);
+  border-radius: 2px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.ratio-track-fill {
+  height: 100%;
+  border-radius: 2px;
+  width: 0%;
+  transition: width 1s ease 0.4s;
+}
+
+.track-good { background: var(--green); }
+.track-warn { background: #f59e0b; }
+.track-bad { background: var(--red); }
+
+.ratio-note { font-size: 11px; color: var(--gray-400); line-height: 1.5; }
+
+/* Scenarios */
+.scenario-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--gray-100);
+  transition: all 0.15s;
+}
+
+.scenario-row:last-child { border-bottom: none; }
+
+.scenario-icon-wrap {
+  width: 36px;
+  height: 36px;
+  background: var(--off-white);
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+}
+
+.scenario-body { flex: 1; }
+
+.scenario-title {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--black);
+  margin-bottom: 2px;
+}
+
+.scenario-desc { font-size: 12px; color: var(--gray-400); line-height: 1.5; }
+
+.scenario-gain {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  color: var(--green);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+/* Checklist */
+.doc-section { margin-bottom: 20px; }
+
+.doc-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--gray-700);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.doc-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  margin-bottom: 6px;
+  transition: border-color 0.15s;
+}
+
+.doc-row:hover { border-color: var(--gray-300); }
+
+.doc-checkbox {
+  width: 18px;
+  height: 18px;
+  border: 1.5px solid var(--gray-300);
+  border-radius: 3px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+  transition: all 0.15s;
+}
+
+.doc-checkbox.ticked {
+  background: var(--black);
+  border-color: var(--black);
+  color: white;
+  font-size: 10px;
+}
+
+.doc-title { font-size: 13px; font-weight: 500; color: var(--black); margin-bottom: 2px; }
+.doc-why { font-size: 12px; color: var(--gray-400); line-height: 1.5; }
+
+/* Next steps */
+.next-steps {
+  background: var(--black);
+  border-radius: var(--radius);
+  padding: 32px;
+  color: var(--white);
+  margin-bottom: 12px;
+}
+
+.next-steps h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 400;
+  margin-bottom: 24px;
+  line-height: 1.2;
+}
+
+.step-row {
+  display: flex;
+  gap: 14px;
+  margin-bottom: 16px;
+  align-items: flex-start;
+}
+
+.step-num {
+  width: 26px;
+  height: 26px;
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: rgba(255,255,255,0.7);
+}
+
+.step-text {
+  font-size: 14px;
+  line-height: 1.6;
+  color: rgba(255,255,255,0.8);
+}
+
+.step-text strong { color: var(--white); }
+
+.btn-white {
+  background: var(--white);
+  color: var(--black);
+  font-size: 14px;
+  font-weight: 500;
+  padding: 13px 24px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  width: 100%;
+  margin-top: 20px;
+  transition: all 0.15s;
+}
+
+.btn-white:hover { background: var(--gray-100); }
+
+/* ─── BROKER BRIEF ─── */
+.broker-banner {
+  background: #fffbf0;
+  border: 1px solid #f0e0a0;
+  border-left: 3px solid #d4a820;
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 12px;
+  color: #8a6a10;
+  line-height: 1.6;
+}
+
+.data-table { width: 100%; }
+
+.data-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--gray-100);
+  font-size: 13px;
+  gap: 16px;
+}
+
+.data-row:last-child { border-bottom: none; }
+.data-key { color: var(--gray-500); flex-shrink: 0; }
+.data-val { font-weight: 500; color: var(--black); text-align: right; }
+
+.flag-row {
+  background: var(--amber-light);
+  border: 1px solid #f0c080;
+  border-radius: var(--radius-sm);
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #9a5a1a;
+  line-height: 1.6;
+  display: flex;
+  gap: 10px;
+}
+
+/* ─── CALENDAR ─── */
+#screen-calendar {
+  background: var(--off-white);
+  align-items: center;
+  justify-content: center;
+  padding: 48px 24px;
+}
+
+.cal-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: 16px;
+  padding: 40px;
+  max-width: 440px;
+  width: 100%;
+  box-shadow: var(--shadow-lg);
+  animation: fadeUp 0.3s ease forwards;
+}
+
+.cal-card h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 400;
+  margin-bottom: 8px;
+  color: var(--black);
+}
+
+.cal-card p {
+  font-size: 13px;
+  color: var(--gray-500);
+  margin-bottom: 28px;
+  line-height: 1.65;
+}
+
+.slots-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.slot {
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+  font-size: 13px;
+  cursor: pointer;
+  background: var(--white);
+  font-family: 'DM Sans', sans-serif;
+  color: var(--black);
+  text-align: left;
+  line-height: 1.4;
+  transition: all 0.15s;
+}
+
+.slot .slot-day { color: var(--gray-500); font-size: 11px; margin-bottom: 2px; }
+.slot .slot-time { font-weight: 500; }
+
+.slot:hover { border-color: var(--black); }
+.slot.selected { background: var(--black); color: var(--white); border-color: var(--black); }
+.slot.selected .slot-day { color: rgba(255,255,255,0.6); }
+
+.back-link {
+  display: block;
+  text-align: center;
+  margin-top: 16px;
+  font-size: 13px;
+  color: var(--gray-400);
+  cursor: pointer;
+  text-decoration: underline;
+  background: none;
+  border: none;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.back-link:hover { color: var(--black); }
+
+/* ─── ANIMATIONS ─── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── RESPONSIVE ─── */
+@media (max-width: 640px) {
+  .landing-hero {
+    grid-template-columns: 1fr;
+    padding: 48px 20px 40px;
+    gap: 40px;
+  }
+  .landing-panel { display: none; }
+  .ratio-grid { grid-template-columns: 1fr; }
+  .range-amount { font-size: 36px; }
+  .cal-card { padding: 28px 24px; }
+}
+
+
+/* ─── CONFIDENCE SCORE ─── */
+.confidence-wrap {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.confidence-dial {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+}
+
+.confidence-dial svg {
+  transform: rotate(-90deg);
+}
+
+.confidence-dial-track {
+  fill: none;
+  stroke: var(--gray-200);
+  stroke-width: 7;
+}
+
+.confidence-dial-fill {
+  fill: none;
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-dasharray: 220;
+  stroke-dashoffset: 220;
+  transition: stroke-dashoffset 1.2s cubic-bezier(0.4,0,0.2,1), stroke 0.3s;
+}
+
+.confidence-dial-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 400;
+  color: var(--black);
+  line-height: 1;
+}
+
+.confidence-dial-label span {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  color: var(--gray-400);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+
+.confidence-right { flex: 1; }
+
+.confidence-verdict {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 4px;
+}
+
+.confidence-sub {
+  font-size: 12px;
+  color: var(--gray-500);
+  line-height: 1.55;
+  margin-bottom: 12px;
+}
+
+.confidence-factors {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.confidence-factor {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+  color: var(--gray-700);
+  padding: 5px 10px;
+  background: var(--off-white);
+  border-radius: var(--radius-xs);
+}
+
+.confidence-factor-delta {
+  font-weight: 600;
+  font-size: 12px;
+}
+
+.delta-neg { color: var(--amber); }
+.delta-pos { color: var(--green); }
+.delta-neu { color: var(--gray-400); }
+
+/* ─── ESCALATION BADGE ─── */
+.escalation-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+.escalation-yes {
+  background: var(--amber-light);
+  color: var(--amber);
+  border: 1px solid #f0c080;
+}
+
+.escalation-no {
+  background: var(--green-light);
+  color: #00805f;
+  border: 1px solid #a0dece;
+}
+
+.escalation-reasons {
+  font-size: 12px;
+  color: var(--gray-500);
+  line-height: 1.7;
+}
+
+/* ─── INTEGRATIONS ─── */
+.ws-connect-banner {
+  background: var(--black);
+  color: var(--white);
+  border-radius: var(--radius);
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.ws-connect-left { flex: 1; }
+
+.ws-connect-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 3px;
+}
+
+.ws-connect-sub {
+  font-size: 12px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.5;
+}
+
+.btn-ws-connect {
+  background: var(--white);
+  color: var(--black);
+  font-size: 13px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 18px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.15s;
+  flex-shrink: 0;
+}
+
+.btn-ws-connect:hover { background: var(--gray-100); }
+
+.btn-ws-connect.connected {
+  background: var(--green);
+  color: var(--white);
+  cursor: default;
+}
+
+.ws-prefill-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  font-weight: 500;
+  background: var(--green-light);
+  color: #00805f;
+  border: 1px solid #a0dece;
+  border-radius: 20px;
+  padding: 3px 10px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.verify-strip {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+
+.verify-strip-header {
+  padding: 16px 20px 12px;
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.verify-strip-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--gray-400);
+  margin-bottom: 4px;
+}
+
+.verify-strip-sub {
+  font-size: 13px;
+  color: var(--gray-700);
+  line-height: 1.5;
+}
+
+.verify-buttons {
+  display: flex;
+  gap: 0;
+}
+
+.verify-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border: none;
+  border-right: 1px solid var(--gray-100);
+  background: var(--white);
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.verify-btn:last-child { border-right: none; }
+.verify-btn:hover { background: var(--off-white); }
+
+.verify-btn.connected { background: var(--green-light); }
+.verify-btn.connected:hover { background: var(--green-light); cursor: default; }
+
+.verify-btn-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  flex-shrink: 0;
+  background: var(--off-white);
+}
+
+.verify-btn.connected .verify-btn-icon {
+  background: #c8f0e4;
+}
+
+.verify-btn-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--black);
+  margin-bottom: 1px;
+}
+
+.verify-btn-desc {
+  font-size: 11px;
+  color: var(--gray-400);
+  line-height: 1.4;
+}
+
+.verify-btn-action {
+  margin-left: auto;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--gray-400);
+  flex-shrink: 0;
+}
+
+.verify-btn.connected .verify-btn-action { color: #00805f; }
+
+.verify-impact {
+  padding: 10px 20px;
+  background: var(--off-white);
+  font-size: 11px;
+  color: var(--gray-500);
+  border-top: 1px solid var(--gray-100);
+  line-height: 1.6;
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════════════════════════════════════
+     LANDING
+══════════════════════════════════════════ -->
+<div id="screen-landing" class="screen active">
+
+  <nav class="nav">
+    <div class="nav-logo">
+      <span class="nav-logo-ws">Wealthsimple</span>
+      <span class="nav-logo-sep">/</span>
+      <span class="nav-logo-product">Mortgage AI</span>
+    </div>
+    <div class="nav-right">
+      <button class="nav-broker-btn" onclick="goTo('screen-calendar')">Talk to a broker</button>
+    </div>
+  </nav>
+
+  <div class="landing-hero">
+    <div class="landing-text">
+      <div class="landing-kicker">Mortgage Readiness</div>
+      <h1 class="landing-h1">Know your number<br>before you <em>fall in love</em><br>with a home</h1>
+      <p class="landing-body">Answer a few questions and get an honest, clear picture of your mortgage eligibility — in minutes, not days. No broker call required to get started.</p>
+      <div class="landing-ctas">
+        <button class="btn btn-primary btn-lg" onclick="startChat('purchase')">Buying a home →</button>
+        <button class="btn btn-primary btn-lg" onclick="startChat('refinance')" style="background:var(--gray-700)">Refinancing →</button>
+        <button class="btn btn-secondary btn-lg" onclick="goTo('screen-calendar')">Talk to a broker</button>
+      </div>
+      <p class="landing-notice">This tool provides a readiness estimate only — not a mortgage pre-approval. A licensed broker will review your file before any approval is issued.</p>
+    </div>
+
+    <div class="landing-panel">
+      <div style="font-size:13px; font-weight:500; color:var(--gray-500); margin-bottom:4px;">How it works</div>
+      <div class="panel-steps">
+        <div class="panel-step">
+          <div class="panel-step-num">1</div>
+          <div class="panel-step-text"><strong>Answer questions</strong> — conversational intake takes about 5 minutes</div>
+        </div>
+        <div class="panel-step">
+          <div class="panel-step-num">2</div>
+          <div class="panel-step-text"><strong>Get your readiness report</strong> — qualifying range, ratios, document checklist</div>
+        </div>
+        <div class="panel-step">
+          <div class="panel-step-num">3</div>
+          <div class="panel-step-text"><strong>Broker reviews your file</strong> — a licensed broker confirms your actual qualifying amount</div>
+        </div>
+        <div class="panel-step">
+          <div class="panel-step-num">4</div>
+          <div class="panel-step-text"><strong>Move forward confidently</strong> — know what you can borrow before you start shopping</div>
+        </div>
+      </div>
+      <div style="border-top:1px solid var(--gray-200); padding-top:20px; margin-top:4px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="panel-stat">
+            <div class="panel-stat-value">~5 min</div>
+            <div class="panel-stat-label">to complete intake</div>
+          </div>
+          <div class="panel-stat">
+            <div class="panel-stat-value">1 day</div>
+            <div class="panel-stat-label">broker turnaround</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════
+     CHAT
+══════════════════════════════════════════ -->
+<div id="screen-chat" class="screen">
+
+  <nav class="nav">
+    <div class="nav-logo">
+      <span class="nav-logo-ws">Wealthsimple</span>
+      <span class="nav-logo-sep">/</span>
+      <span class="nav-logo-product">Mortgage AI</span>
+    </div>
+    <div class="nav-right">
+      <button class="nav-broker-btn" onclick="goTo('screen-calendar')">Prefer to talk to a broker?</button>
+    </div>
+  </nav>
+
+  <div class="chat-layout">
+    <div class="chat-progress-bar">
+      <div class="chat-progress-fill" id="progress-fill"></div>
+    </div>
+    <div class="chat-phase">
+      <div class="chat-phase-dot"></div>
+      <span id="phase-text">Getting started</span>
+    </div>
+
+    <div class="chat-messages" id="chat-messages">
+      <div class="chat-messages-inner" id="chat-inner"></div>
+    </div>
+
+    <div class="chat-input-bar">
+      <div class="chat-input-inner">
+        <textarea
+          class="chat-textarea"
+          id="chat-input"
+          placeholder="Type your answer..."
+          rows="1"
+          onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendMsg()}"
+          oninput="this.style.height='auto';this.style.height=this.scrollHeight+'px'"
+        ></textarea>
+        <button class="chat-send" id="send-btn" onclick="sendMsg()">↑</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     REPORT
+══════════════════════════════════════════ -->
+<div id="screen-report" class="screen">
+
+  <nav class="report-nav">
+    <div class="report-nav-title">Readiness Assessment</div>
+    <div class="tab-group">
+      <button class="tab-btn active" onclick="switchTab('user')">Your report</button>
+      <button class="tab-btn" onclick="switchTab('broker')">Broker brief</button>
+    </div>
+  </nav>
+
+  <div class="report-container">
+
+    <!-- DISCLAIMER — always visible, both tabs -->
+    <div class="disclaimer" id="disclaimer">
+      <div class="disclaimer-icon">⚠</div>
+      <div>
+        <div class="disclaimer-title">This is not a mortgage pre-approval</div>
+        <div class="disclaimer-body">This assessment is based on the information you provided and has not been independently verified. <strong>Do not make an offer on a property based on this report.</strong> A licensed Wealthsimple mortgage broker will review your file and confirm your actual qualifying amount before any approval is issued.</div>
+      </div>
+    </div>
+
+    <!-- USER TAB -->
+    <div id="tab-user">
+
+      <!-- Range -->
+      <div class="card">
+        <div class="card-body-lg">
+          <div class="section-title">Estimated qualifying range</div>
+          <div class="range-display">
+            <div class="range-amount" id="r-amount">—</div>
+          </div>
+          <div class="range-span" id="r-span">Based on information provided · Unverified</div>
+          <div class="range-bar"><div class="range-bar-fill" id="r-bar"></div></div>
+          <div class="range-bounds">
+            <span id="r-low">—</span>
+            <span id="r-high">—</span>
+          </div>
+          <div class="range-insight" id="r-insight">—</div>
+        </div>
+      </div>
+
+      <!-- Confidence Score -->
+      <div class="card" id="confidence-card">
+        <div class="card-body">
+          <div class="section-title">File confidence score</div>
+          <div class="confidence-wrap">
+            <div class="confidence-dial">
+              <svg width="80" height="80" viewBox="0 0 80 80">
+                <circle class="confidence-dial-track" cx="40" cy="40" r="35"/>
+                <circle class="confidence-dial-fill" id="conf-arc" cx="40" cy="40" r="35"/>
+              </svg>
+              <div class="confidence-dial-label">
+                <div id="conf-score">—</div>
+                <span>/ 100</span>
+              </div>
+            </div>
+            <div class="confidence-right">
+              <div class="confidence-verdict" id="conf-verdict">—</div>
+              <div class="confidence-sub" id="conf-sub">—</div>
+              <div class="confidence-factors" id="conf-factors"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Verification Strip -->
+      <div class="verify-strip" id="verify-strip">
+        <div class="verify-strip-header">
+          <div class="verify-strip-title">Strengthen your file</div>
+          <div class="verify-strip-sub">Connect data sources to verify your income and credit profile. Each connection increases your confidence score and reduces broker review time.</div>
+        </div>
+        <div class="verify-buttons">
+          <button class="verify-btn" id="vbtn-ws" onclick="simulateVerify('ws', this)">
+            <div class="verify-btn-icon">🏦</div>
+            <div>
+              <div class="verify-btn-label">Wealthsimple Account</div>
+              <div class="verify-btn-desc">Pre-fill savings, RRSP, TFSA balances</div>
+            </div>
+            <div class="verify-btn-action">Connect →</div>
+          </button>
+          <button class="verify-btn" id="vbtn-cra" onclick="simulateVerify('cra', this)">
+            <div class="verify-btn-icon">🇨🇦</div>
+            <div>
+              <div class="verify-btn-label">CRA My Account</div>
+              <div class="verify-btn-desc">Verify income via NOA — 2-year average</div>
+            </div>
+            <div class="verify-btn-action">Connect →</div>
+          </button>
+          <button class="verify-btn" id="vbtn-credit" onclick="simulateVerify('credit', this)">
+            <div class="verify-btn-icon">📊</div>
+            <div>
+              <div class="verify-btn-label">Credit Bureau</div>
+              <div class="verify-btn-desc">Soft pull — does not affect your score</div>
+            </div>
+            <div class="verify-btn-action">Connect →</div>
+          </button>
+        </div>
+        <div class="verify-impact">
+          ⚡ Connecting CRA My Account typically increases file confidence by 15–20 points and reduces broker intake time by an additional 30 minutes.
+        </div>
+      </div>
+
+      <!-- Ratios -->
+      <div class="card">
+        <div class="card-body">
+          <div class="section-title">Debt ratio analysis</div>
+          <div class="ratio-grid">
+            <div class="ratio-card">
+              <div class="ratio-name">GDS Ratio</div>
+              <div class="ratio-value" id="r-gds">—</div>
+              <div class="ratio-pill" id="r-gds-pill"></div>
+              <div class="ratio-track"><div class="ratio-track-fill" id="r-gds-track"></div></div>
+              <div class="ratio-note">Housing costs as a % of income. Lender limit: 32%.</div>
+            </div>
+            <div class="ratio-card">
+              <div class="ratio-name">TDS Ratio</div>
+              <div class="ratio-value" id="r-tds">—</div>
+              <div class="ratio-pill" id="r-tds-pill"></div>
+              <div class="ratio-track"><div class="ratio-track-fill" id="r-tds-track"></div></div>
+              <div class="ratio-note">All debt payments as a % of income. Lender limit: 44%.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Scenarios -->
+      <div class="card" id="scenarios-card">
+        <div class="card-body">
+          <div class="section-title">Ways to strengthen your position</div>
+          <div id="scenarios-list"></div>
+        </div>
+      </div>
+
+      <!-- Checklist -->
+      <div class="card">
+        <div class="card-body">
+          <div class="section-title">Your document checklist</div>
+          <div id="doc-list"></div>
+        </div>
+      </div>
+
+      <!-- Next steps -->
+      <div class="next-steps">
+        <h3>Ready to move forward?</h3>
+        <div class="step-row">
+          <div class="step-num">1</div>
+          <div class="step-text">Gather the documents on your checklist above.</div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">2</div>
+          <div class="step-text">Upload them when ready — we'll verify completeness before routing to a broker.</div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">3</div>
+          <div class="step-text">A <strong>licensed mortgage broker</strong> will review your verified file and contact you within 1 business day with your confirmed qualifying amount.</div>
+        </div>
+        <div class="step-row">
+          <div class="step-num">4</div>
+          <div class="step-text"><strong>Do not make an offer on a property until you receive written confirmation from your broker.</strong></div>
+        </div>
+        <button class="btn-white" onclick="goTo('screen-calendar')">Book a broker call instead →</button>
+      </div>
+
+      <!-- Rate Context -->
+      <div class="card" id="rate-context-card">
+        <div class="card-body">
+          <div class="section-title">Current rate environment</div>
+          <div id="rate-context-text" style="font-size:13px; color:var(--gray-600); line-height:1.8;"></div>
+          <div style="margin-top:10px; font-size:11px; color:var(--gray-400);">Rate context is approximate and for reference only. Your broker will confirm the exact rate available for your profile and situation.</div>
+        </div>
+      </div>
+
+      <!-- Follow-up Chat -->
+      <div class="card">
+        <div class="card-body">
+          <div class="section-title">Questions about your assessment?</div>
+          <div id="followup-inner" style="max-height:280px; overflow-y:auto; margin-bottom:12px; display:flex; flex-direction:column; gap:8px;"></div>
+          <div style="display:flex; gap:8px;">
+            <input id="followup-input" type="text" placeholder="e.g. Why is my range lower than expected?" style="flex:1; padding:10px 14px; border:1px solid var(--gray-200); border-radius:6px; font-size:13px; font-family:'DM Sans',sans-serif; outline:none;" onkeydown="if(event.key==='Enter') sendFollowup()"/>
+            <button onclick="sendFollowup()" style="background:var(--black); color:var(--white); border:none; border-radius:6px; padding:10px 18px; font-size:13px; font-weight:500; font-family:'DM Sans',sans-serif; cursor:pointer;">Ask</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BROKER TAB -->
+    <div id="tab-broker" style="display:none">
+      <div class="broker-banner">
+        🔐 <strong>Broker view</strong> — All data is client-provided and unverified. Flagged items require your judgment before proceeding. The client has been explicitly informed this is not a pre-approval.
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="section-title">Human escalation</div>
+          <div id="b-escalation">—</div>
+        </div>
+      </div>
+
+      <div class="card" style="border-left: 3px solid var(--green);">
+        <div class="card-body">
+          <div class="section-title">💬 Suggested opening</div>
+          <div id="b-opener" style="font-size:13px; color:var(--gray-700); line-height:1.8; font-style:italic;"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="section-title">Client financial profile</div>
+          <div id="b-profile"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="section-title">Calculated ratios</div>
+          <div id="b-ratios"></div>
+        </div>
+      </div>
+
+      <div class="card" id="b-flags-card">
+        <div class="card-body">
+          <div class="section-title">⚠ Complexity flags — requires broker judgment</div>
+          <div id="b-flags"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-body">
+          <div class="section-title">What the client was told</div>
+          <div id="b-told" style="font-size:13px; color:var(--gray-500); line-height:1.7;"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════
+     CALENDAR
+══════════════════════════════════════════ -->
+<div id="screen-calendar" class="screen">
+
+  <nav class="nav">
+    <div class="nav-logo">
+      <span class="nav-logo-ws">Wealthsimple</span>
+      <span class="nav-logo-sep">/</span>
+      <span class="nav-logo-product">Mortgage AI</span>
+    </div>
+  </nav>
+
+  <div style="flex:1; display:flex; align-items:center; justify-content:center; padding:24px; background:var(--off-white);">
+    <div class="cal-card">
+      <h2>Book a broker call</h2>
+      <p>A licensed Wealthsimple mortgage broker will call you at your chosen time. If you've completed the AI intake, your partial file will be shared with them in advance.</p>
+
+      <div class="section-title">Available times</div>
+      <div class="slots-grid">
+        <button class="slot" onclick="pickSlot(this)">
+          <div class="slot-day">Mon, Feb 24</div>
+          <div class="slot-time">10:00 AM EST</div>
+        </button>
+        <button class="slot" onclick="pickSlot(this)">
+          <div class="slot-day">Mon, Feb 24</div>
+          <div class="slot-time">2:00 PM EST</div>
+        </button>
+        <button class="slot" onclick="pickSlot(this)">
+          <div class="slot-day">Tue, Feb 25</div>
+          <div class="slot-time">11:00 AM EST</div>
+        </button>
+        <button class="slot" onclick="pickSlot(this)">
+          <div class="slot-day">Tue, Feb 25</div>
+          <div class="slot-time">3:30 PM EST</div>
+        </button>
+        <button class="slot" onclick="pickSlot(this)">
+          <div class="slot-day">Wed, Feb 26</div>
+          <div class="slot-time">9:00 AM EST</div>
+        </button>
+        <button class="slot" onclick="pickSlot(this)">
+          <div class="slot-day">Thu, Feb 27</div>
+          <div class="slot-time">1:00 PM EST</div>
+        </button>
+      </div>
+
+      <button class="btn btn-primary btn-full" id="confirm-btn" disabled onclick="confirmSlot()">Select a time to confirm</button>
+      <button class="back-link" onclick="goBack()">← Go back</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ════════════════════════════════════════
+// STATE
+// ════════════════════════════════════════
+const S = {
+  history: [],
+  profile: {},
+  systemPrompt: `You are a warm, concise mortgage intake assistant for Wealthsimple Mortgage AI, a Canadian mortgage readiness tool.
+
+ABSOLUTE RULES — follow these exactly:
+1. Ask ONE question per message. Never combine two questions.
+2. Be brief and warm — maximum 2 short sentences before your question.
+3. Plain language only. No financial jargon or acronyms.
+4. You are NOT a licensed broker. You cannot give advice or recommendations.
+5. This is an eligibility ESTIMATE only — never call it a pre-approval.
+6. When you have all required information, your ENTIRE response must be ONLY the DONE: line — no greeting, no explanation, no other text.
+
+IMPORTANT: All NUMBER values must be plain integers — no $, no commas, no text. Use 0 if none.
+STRING fields like names and email should be plain text. Use "unknown" if not provided.
+
+═══ CONTACT INFO ═══
+
+If the user is NOT a Wealthsimple client (wsClient: false), collect:
+- Primary applicant full name
+- If co-applicant: co-applicant full name
+- Email address
+- Phone number
+
+If the user IS a Wealthsimple client (wsClient: true), this info is pre-filled — skip these questions.
+
+═══ IF USER IS BUYING A NEW HOME ═══
+
+Collect in this order, one question at a time:
+1. Applying alone or with a partner/spouse as a co-applicant?
+2. If not WS client: full name(s), email, phone (one at a time)
+3. Are they a first-time home buyer? (yes / no)
+4. What type of property are they looking at? (detached / semi-detached / townhouse / condo / not sure yet)
+5. Where are they in the process? (just exploring / actively looking at properties / have an accepted offer)
+6. What is their timeline? (within 3 months / 3–6 months / 6–12 months / just planning)
+7. Employment type of main earner (salaried / self-employed / contract)
+8. Total combined household gross annual income before tax
+9. Any other household income? (rental, bonuses, child support) — allow "none"
+10. Monthly debt payments — car loan, then student loan, then credit card minimums, then line of credit. Each separately.
+11. Down payment — if wsClient=true and savings data is in history, say: "I can see you have $X in savings across your Wealthsimple accounts. Will you be using these funds for your down payment? Do you have any additional funds outside Wealthsimple?" Then ask source (savings / RRSP / gift / mix). If not WS client, ask normally.
+12. Target property price range
+13. Only if self-employed: years in business, income consistent year to year?
+
+Then output ONLY this line:
+DONE:{"intent":"purchase","wsClient":true|false,"primaryName":"STRING","coApplicantName":"STRING_OR_null","email":"STRING","phone":"STRING","firstTimeBuyer":true|false,"propertyType":"detached|semi|townhouse|condo|unknown","buyingStage":"exploring|actively_looking|offer_accepted","timeline":"0_3mo|3_6mo|6_12mo|planning","employmentType":"salaried|self_employed|contract","coApplicant":true|false,"familyIncome":NUMBER,"otherIncome":NUMBER,"carLoanMonthly":NUMBER,"studentLoanMonthly":NUMBER,"creditCardBalance":NUMBER,"locBalance":NUMBER,"downPayment":NUMBER,"downPaymentSource":"savings|gift|rrsp|mixed","propertyPrice":NUMBER,"selfEmployedYears":NUMBER_OR_null,"hasVariableIncome":true|false}
+
+═══ IF USER IS REFINANCING ═══
+
+Collect in this order, one question at a time:
+1. Applying alone or with a partner/spouse as a co-applicant?
+2. If not WS client: full name(s), email, phone (one at a time)
+3. When does their current mortgage term end? (within 6 months / 6–18 months / more than 18 months / already at renewal)
+4. Who is their current lender? (TD / RBC / Scotiabank / BMO / CIBC / First National / MCAP / other)
+5. Main reason for refinancing (lower rate / access home equity / consolidate debt / other)
+6. If access home equity: what would they use the funds for? (home renovation / investment / debt consolidation / other)
+7. Employment type of main earner (salaried / self-employed / contract)
+8. Total combined household gross annual income before tax
+9. Any other household income? — allow "none"
+10. Monthly debt payments — car loan, then student loan, then credit card minimums, then line of credit. Each separately.
+11. Current estimated property value
+12. Current mortgage balance remaining
+13. Current interest rate
+14. Approximate years remaining on amortisation (e.g. 18 years)
+15. Only if self-employed: years in business, income consistent year to year?
+
+Then output ONLY this line:
+DONE:{"intent":"refinance","wsClient":true|false,"primaryName":"STRING","coApplicantName":"STRING_OR_null","email":"STRING","phone":"STRING","termRemaining":"under_6mo|6_18mo|over_18mo|at_renewal","currentLender":"STRING","refinanceReason":"lower_rate|access_equity|consolidate_debt|other","equityUse":"renovation|investment|debt_consolidation|other|null","employmentType":"salaried|self_employed|contract","coApplicant":true|false,"familyIncome":NUMBER,"otherIncome":NUMBER,"carLoanMonthly":NUMBER,"studentLoanMonthly":NUMBER,"creditCardBalance":NUMBER,"locBalance":NUMBER,"propertyValue":NUMBER,"currentMortgageBalance":NUMBER,"currentRate":NUMBER,"amortisationRemaining":NUMBER,"refinanceReason":"lower_rate|access_equity|consolidate_debt|other","selfEmployedYears":NUMBER_OR_null,"hasVariableIncome":true|false}`,
+  prevScreen: 'screen-landing'
+};
+
+
+// ════════════════════════════════════════
+// NAVIGATION
+// ════════════════════════════════════════
+function goTo(id) {
+  S.prevScreen = document.querySelector('.screen.active')?.id || 'screen-landing';
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function goBack() { goTo(S.prevScreen); }
+
+// ════════════════════════════════════════
+// CHAT
+// ════════════════════════════════════════
+function startChat(intent) {
+  goTo('screen-chat');
+  S.history = [];
+  S.intent = intent;
+  S.wsConnected = false;
+
+  // Prime intent into history silently
+  const isPurchase = intent === 'purchase';
+  S.history.push({ role: "user", content: isPurchase ? "I am buying a new home." : "I am refinancing my existing mortgage." });
+
+  const welcomeMsg = "Welcome to Wealthsimple Mortgage AI. I'll ask you a few questions to build your readiness assessment — it takes about 5 minutes.\n\nAre you an existing Wealthsimple client?";
+  S.history.push({ role: "assistant", content: welcomeMsg });
+  addAI(welcomeMsg);
+  addOptions(["Yes, I'm a Wealthsimple client", "No, I'm new to Wealthsimple"]);
+}
+
+function handleWSClientAnswer(isClient) {
+  document.querySelectorAll('.msg-options').forEach(e => e.remove());
+
+  if (isClient) {
+    addUser("Yes, I'm a Wealthsimple client");
+    S.history.push({ role: "user", content: "Yes, I'm a Wealthsimple client." });
+    addAI("One moment while I pull up your account...");
+
+    setTimeout(() => {
+      // Simulated account data
+      const mockData = {
+        name: "Alex",
+        fullName: "Alex Chen",
+        email: "alex.chen@email.com",
+        phone: "416-555-0192",
+        rrsp: 28500,
+        tfsa: 41200,
+        cashSavings: 63000,
+        totalSavings: 92000
+      };
+      S.wsData = mockData;
+      S.wsConnected = true;
+
+      // Prime history with account data silently — AI uses it when asking about down payment
+      S.history.push({ role: "assistant", content: "One moment while I pull up your account..." });
+      S.history.push({
+        role: "user",
+        content: "Account connected. Client name: " + mockData.fullName + ". Email: " + mockData.email + ". Phone: " + mockData.phone + ". Wealthsimple savings on file: RRSP $" + mockData.rrsp.toLocaleString() + ", TFSA $" + mockData.tfsa.toLocaleString() + ", cash savings $" + mockData.cashSavings.toLocaleString() + " — total $" + mockData.totalSavings.toLocaleString() + ". wsClient=true. Do NOT mention these details yet. Just greet them by first name and ask the co-applicant question."
+      });
+
+      // Greet by name and go straight to co-applicant
+      const greetMsg = "Hi " + mockData.name + "! Will you be applying for the mortgage on your own, or with a partner or spouse as a co-applicant?";
+      S.history.push({ role: "assistant", content: greetMsg });
+      addAI(greetMsg);
+      addOptions(["On my own", "With a co-applicant"]);
+
+    }, 1000);
+
+  } else {
+    addUser("No, I'm new to Wealthsimple");
+    S.history.push({ role: "user", content: "No, I'm not a Wealthsimple client. wsClient=false." });
+    // Let AI take over — it will ask for name, email, phone, then co-applicant
+    sendMsg("No, I'm not a Wealthsimple client. Please start by asking for my full name.");
+  }
+}
+
+
+function handleDPConfirmation(choice) {
+  document.querySelectorAll('.msg-options').forEach(e => e.remove());
+  addUser(choice);
+
+  const dp = S.wsData ? S.wsData.totalDownPayment : 0;
+
+  if (choice === "Yes — use all of it, no other savings") {
+    const msg = "Got it — I've confirmed **$" + dp.toLocaleString() + "** as your down payment from your Wealthsimple accounts.";
+    S.history.push({ role: "user", content: "I confirm my full down payment of $" + dp.toLocaleString() + " from my Wealthsimple RRSP, TFSA and savings. No additional savings. downPayment=" + dp + " downPaymentSource=rrsp" });
+    S.history.push({ role: "assistant", content: msg });
+    addAI(msg);
+    setTimeout(() => {
+      const nextQ = "Will you be applying alone, or with a partner or spouse as a co-applicant?";
+      S.history.push({ role: "assistant", content: nextQ });
+      addAI(nextQ);
+      addOptions(["Applying alone", "With a co-applicant"]);
+    }, 500);
+
+  } else if (choice === "Yes — plus I have additional savings") {
+    const msg = "Great — I'll count your Wealthsimple balance of **$" + dp.toLocaleString() + "** plus any additional savings you share. How much do you have in savings outside of Wealthsimple?";
+    S.history.push({ role: "user", content: "I want to use my full Wealthsimple balance of $" + dp.toLocaleString() + " plus additional outside savings toward my down payment." });
+    S.history.push({ role: "assistant", content: msg });
+    addAI(msg);
+    // AI will collect the additional amount and sum them
+
+  } else {
+    const msg = "No problem — how much of the $" + dp.toLocaleString() + " are you planning to put toward the down payment?";
+    S.history.push({ role: "user", content: "I only want to use part of my Wealthsimple balance toward the down payment." });
+    S.history.push({ role: "assistant", content: msg });
+    addAI(msg);
+    // AI will collect the specific amount
+  }
+}
+
+async function sendMsg(override) {
+  const input = document.getElementById('chat-input');
+  const text = (override || input.value).trim();
+  if (!text) return;
+
+  addUser(text);
+  input.value = '';
+  input.style.height = 'auto';
+  document.querySelectorAll('.msg-options').forEach(e => e.remove());
+  S.history.push({ role: "user", content: text });
+  document.getElementById('send-btn').disabled = true;
+
+  const tid = showTyping();
+  updateProgress(S.history.length);
+
+  try {
+    const res = await fetch("/.netlify/functions/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        system: S.systemPrompt,
+        messages: S.history
+      })
+    });
+
+    const data = await res.json();
+    console.log('[WS Mortgage AI] API response:', JSON.stringify(data).slice(0, 500));
+
+    // Handle API-level errors (e.g. auth, rate limit)
+    if (data.error) {
+      removeTyping(tid);
+      addAI("There was an issue connecting to the AI service: " + (data.error.message || "Unknown error") + ". Please try again.");
+      document.getElementById('send-btn').disabled = false;
+      return;
+    }
+
+    if (!data.content || !data.content[0] || !data.content[0].text) {
+      removeTyping(tid);
+      addAI("Didn't receive a valid response. Please try again.");
+      document.getElementById('send-btn').disabled = false;
+      return;
+    }
+
+    const reply = data.content[0].text;
+    removeTyping(tid);
+    console.log('[WS Mortgage AI] Reply text:', reply.slice(0, 300));
+
+    // Robust DONE detection — handles any text before/after the JSON
+    const doneIndex = reply.indexOf('DONE:');
+    if (doneIndex !== -1) {
+      let parsed = null;
+      const afterDone = reply.slice(doneIndex + 5).trim();
+
+      // Try 1: direct parse of everything after DONE:
+      try { parsed = JSON.parse(afterDone); } catch(e1) {
+        console.log('[WS Mortgage AI] Parse attempt 1 failed:', e1.message);
+      }
+
+      // Try 2: extract outermost { } block
+      if (!parsed) {
+        try {
+          const start = afterDone.indexOf('{');
+          const end = afterDone.lastIndexOf('}');
+          if (start !== -1 && end > start) {
+            parsed = JSON.parse(afterDone.slice(start, end + 1));
+          }
+        } catch(e2) {
+          console.log('[WS Mortgage AI] Parse attempt 2 failed:', e2.message);
+        }
+      }
+
+      // Try 3: search whole reply for JSON block
+      if (!parsed) {
+        try {
+          const start = reply.indexOf('{');
+          const end = reply.lastIndexOf('}');
+          if (start !== -1 && end > start) {
+            parsed = JSON.parse(reply.slice(start, end + 1));
+          }
+        } catch(e3) {
+          console.log('[WS Mortgage AI] Parse attempt 3 failed:', e3.message);
+        }
+      }
+
+      if (parsed) {
+        console.log('[WS Mortgage AI] Parsed profile:', parsed);
+        S.profile = parsed;
+        addAI("I have everything I need. Building your readiness assessment now...");
+        setTimeout(() => { buildReport(S.profile); goTo('screen-report'); }, 1400);
+      } else {
+        console.warn('[WS Mortgage AI] All parse attempts failed for reply:', reply);
+        S.history.push({ role: "assistant", content: reply });
+        addAI("Almost there — just a couple more details to confirm.");
+      }
+    } else {
+      S.history.push({ role: "assistant", content: reply });
+      addAI(reply);
+    }
+  } catch(err) {
+    removeTyping(tid);
+    console.error('[WS Mortgage AI] Fetch error:', err);
+    addAI("Something went wrong connecting to the service. Please check your connection and try again.");
+  }
+
+  document.getElementById('send-btn').disabled = false;
+}
+
+function addAI(text) {
+  const inner = document.getElementById('chat-inner');
+  const d = document.createElement('div');
+  d.className = 'msg msg-ai';
+  const html = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br>');
+  d.innerHTML = `<div class="msg-avatar">WS</div><div class="msg-bubble">${html}</div>`;
+  inner.appendChild(d);
+  scroll();
+}
+
+function addUser(text) {
+  const inner = document.getElementById('chat-inner');
+  const d = document.createElement('div');
+  d.className = 'msg msg-user';
+  d.innerHTML = `<div class="msg-bubble">${text}</div>`;
+  inner.appendChild(d);
+  scroll();
+}
+
+function addOptions(opts) {
+  const inner = document.getElementById('chat-inner');
+  const d = document.createElement('div');
+  d.className = 'msg-options';
+  opts.forEach(o => {
+    const b = document.createElement('button');
+    b.className = 'option-pill';
+    b.textContent = o;
+    b.onclick = () => {
+      // Intercept WS client question (history has exactly 2 items: intent + welcome)
+      if (S.history.length === 2 &&
+          (o === "Yes, I'm a Wealthsimple client" || o === "No, I'm new to Wealthsimple")) {
+        handleWSClientAnswer(o === "Yes, I'm a Wealthsimple client");
+      } else {
+        sendMsg(o);
+      }
+    };
+    d.appendChild(b);
+  });
+  inner.appendChild(d);
+  scroll();
+}
+
+let _tc = 0;
+function showTyping() {
+  const id = 'typ-' + ++_tc;
+  const inner = document.getElementById('chat-inner');
+  const d = document.createElement('div');
+  d.id = id; d.className = 'msg msg-ai';
+  d.innerHTML = `<div class="msg-avatar">WS</div><div class="msg-bubble"><div class="typing-dots"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div></div>`;
+  inner.appendChild(d);
+  scroll();
+  return id;
+}
+
+function removeTyping(id) {
+  const el = document.getElementById(id);
+  if (el) el.remove();
+}
+
+function scroll() {
+  const el = document.getElementById('chat-messages');
+  el.scrollTop = el.scrollHeight;
+}
+
+const PHASES = ['Getting started', 'Employment & income', 'Debts & liabilities', 'Down payment', 'Finalising'];
+function updateProgress(count) {
+  const step = Math.min(Math.floor(count / 4), 4);
+  document.getElementById('progress-fill').style.width = (10 + step * 20) + '%';
+  document.getElementById('phase-text').textContent = PHASES[step] || 'Finalising';
+}
+
+// ════════════════════════════════════════
+// REPORT BUILDER
+// ════════════════════════════════════════
+function buildReport(p) {
+  // Personalise report nav title
+  if (p.primaryName && p.primaryName !== 'unknown') {
+    const navTitle = document.querySelector('.report-nav-title');
+    if (navTitle) navTitle.textContent = p.primaryName + "'s Readiness Assessment";
+  }
+  if (p.intent === 'refinance') {
+    buildRefinanceReport(p);
+  } else {
+    buildPurchaseReport(p);
+  }
+}
+
+function buildRefinanceReport(p) {
+  const RATE = 0.055;
+  const N    = 300;
+
+  const annualIncome  = (p.familyIncome||p.grossIncome||0) + (p.otherIncome||0);
+  const monthlyIncome = annualIncome / 12;
+  const monthlyDebts  =
+    (p.carLoanMonthly||0) +
+    (p.studentLoanMonthly||0) +
+    (p.creditCardBalance ? (p.creditCardBalance * 0.03) : 0) +
+    (p.locBalance ? (p.locBalance * 0.01) : 0);
+
+  const propVal   = p.propertyValue || 0;
+  const balance   = p.currentMortgageBalance || 0;
+  const equity    = propVal - balance;
+  const ltv       = propVal > 0 ? (balance / propVal) * 100 : 0;
+  const currentR  = (p.currentRate || 5.5) / 100 / 12;
+  const currentPmt = balance > 0 ? balance * (currentR * Math.pow(1+currentR, N)) / (Math.pow(1+currentR, N)-1) : 0;
+  const newR      = RATE / 12;
+  const newPmt    = balance > 0 ? balance * (newR * Math.pow(1+newR, N)) / (Math.pow(1+newR, N)-1) : 0;
+  const monthlySaving = currentPmt - newPmt;
+
+  const hsg  = newPmt + propVal * 0.008/12 + 200;
+  const gds  = monthlyIncome > 0 ? hsg / monthlyIncome : 0;
+  const tds  = monthlyIncome > 0 ? (hsg + monthlyDebts) / monthlyIncome : 0;
+
+  // Update section title for refinance
+  const sectionTitleEl = document.querySelector('#tab-user .section-title');
+  if (sectionTitleEl) sectionTitleEl.textContent = 'Refinance Assessment';
+
+  setText('r-amount', fmt(Math.round(equity / 1000) * 1000));
+  setText('r-span', 'Available home equity · LTV: ' + ltv.toFixed(1) + '% · Unverified estimate');
+  setText('r-low', 'Balance: ' + fmt(balance));
+  setText('r-high', 'Property value: ' + fmt(propVal));
+  setTimeout(() => { document.getElementById('r-bar').style.width = Math.min((1 - ltv/100) * 100, 100) + '%'; }, 150);
+
+  // ── Equity access ceiling (max 80% LTV in Canada)
+  const maxRefiBalance = propVal * 0.80;
+  const equityAccessible = Math.max(0, maxRefiBalance - balance);
+
+  // ── Amortisation reset cost
+  const amortRemaining = p.amortisationRemaining || 20;
+  const newAmort = 25; // resetting to 25yr
+  const amortResetCost = amortRemaining < newAmort
+    ? Math.round((newPmt * newAmort * 12) - (newPmt * amortRemaining * 12))
+    : 0;
+
+  // ── Break-even analysis (penalty estimate — rough heuristic)
+  const penaltyMonths = p.termRemaining === 'under_6mo' ? 1 :
+                        p.termRemaining === '6_18mo' ? 6 :
+                        p.termRemaining === 'over_18mo' ? 12 : 0;
+  const estimatedPenalty = currentPmt * penaltyMonths;
+  const breakEvenMonths = monthlySaving > 0 ? Math.ceil(estimatedPenalty / monthlySaving) : null;
+
+  const reasonMap = { lower_rate: 'lower your interest rate', access_equity: 'access home equity', consolidate_debt: 'consolidate debt', other: 'refinance' };
+  let insight = '';
+  if (p.termRemaining === 'at_renewal') {
+    insight = `You're at renewal — no prepayment penalty applies. This is the ideal time to refinance or renegotiate your rate. Your broker will review lender options for your profile.`;
+  } else if (p.termRemaining === 'under_6mo') {
+    insight = `Your term ends soon. It may be worth waiting for renewal to avoid any prepayment penalty. Your broker will calculate whether breaking early makes financial sense given your goals.`;
+  } else if (monthlySaving > 50 && breakEvenMonths) {
+    insight = `At current market rates, refinancing could save approximately $${fmtNum(Math.round(monthlySaving))}/month. Based on an estimated prepayment penalty, your break-even would be around ${breakEvenMonths} months. Your broker will calculate the exact penalty figure.`;
+  } else if (p.refinanceReason === 'access_equity') {
+    insight = `You have approximately ${fmt(equity)} in home equity. At 80% LTV, the maximum accessible equity is approximately ${fmt(Math.round(equityAccessible/1000)*1000)}. Your broker will confirm the exact amount based on your qualifying income.`;
+  } else if (p.refinanceReason === 'consolidate_debt') {
+    insight = `Rolling high-interest debt into your mortgage at a lower rate could reduce total monthly payments. Your broker will model the trade-off between short-term savings and any amortisation extension.`;
+  } else {
+    insight = `Your refinance profile looks reasonable. Your broker will review the full picture including prepayment penalty calculations, lender options, and timing.`;
+  }
+  setText('r-insight', insight);
+
+  // ── Additional refinance metrics cards
+  const metricsHtml = `
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:16px;">
+      <div style="padding:14px; background:var(--off-white); border-radius:8px;">
+        <div style="font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--gray-400); margin-bottom:4px;">Max accessible equity</div>
+        <div style="font-size:20px; font-family:'Playfair Display',serif;">${fmt(Math.round(equityAccessible/1000)*1000)}</div>
+        <div style="font-size:11px; color:var(--gray-400); margin-top:2px;">At 80% LTV limit</div>
+      </div>
+      <div style="padding:14px; background:var(--off-white); border-radius:8px;">
+        <div style="font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--gray-400); margin-bottom:4px;">Est. monthly saving</div>
+        <div style="font-size:20px; font-family:'Playfair Display',serif;">${monthlySaving > 0 ? '$' + fmtNum(Math.round(monthlySaving)) : '—'}</div>
+        <div style="font-size:11px; color:var(--gray-400); margin-top:2px;">At current market rates</div>
+      </div>
+      ${breakEvenMonths ? `<div style="padding:14px; background:var(--off-white); border-radius:8px;">
+        <div style="font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--gray-400); margin-bottom:4px;">Est. break-even</div>
+        <div style="font-size:20px; font-family:'Playfair Display',serif;">${breakEvenMonths} mo</div>
+        <div style="font-size:11px; color:var(--gray-400); margin-top:2px;">After prepayment penalty</div>
+      </div>` : ''}
+      ${amortResetCost > 0 ? `<div style="padding:14px; background:#FEF6EC; border-radius:8px;">
+        <div style="font-size:11px; text-transform:uppercase; letter-spacing:0.08em; color:var(--amber); margin-bottom:4px;">Amortisation reset cost</div>
+        <div style="font-size:20px; font-family:'Playfair Display',serif; color:var(--amber);">${fmt(amortResetCost)}</div>
+        <div style="font-size:11px; color:var(--gray-400); margin-top:2px;">Extra interest: ${amortRemaining}yr → ${newAmort}yr</div>
+      </div>` : ''}
+    </div>`;
+
+  const rInsightEl = document.getElementById('r-insight');
+  if (rInsightEl) {
+    rInsightEl.insertAdjacentHTML('afterend', metricsHtml);
+  }
+
+  // Rate context for refinance
+  buildRateContext(p, { maxMortgage: balance, maxPrice: propVal });
+
+  setRatio('r-gds', 'r-gds-pill', 'r-gds-track', gds, 0.32, 0.39);
+  setRatio('r-tds', 'r-tds-pill', 'r-tds-track', tds, 0.44, 0.48);
+
+  // No scenarios for refinance — hide that section
+  const sc = document.getElementById('scenarios-card');
+  if (sc) sc.style.display = 'none';
+
+  // Refinance-specific checklist
+  const docs = getRefinanceChecklist(p.employmentType);
+  document.getElementById('doc-list').innerHTML = docs.map(g => `
+    <div class="doc-section">
+      <div class="doc-section-title">${g.title}</div>
+      ${g.items.map(item => `
+        <div class="doc-row">
+          <div class="doc-checkbox" onclick="tick(this)"></div>
+          <div>
+            <div class="doc-title">${item.name}</div>
+            <div class="doc-why">${item.why}</div>
+          </div>
+        </div>`).join('')}
+    </div>`).join('');
+
+  buildBrokerBrief(p, { gds, tds, maxPrice: propVal, monthlyDebts, monthlyIncome });
+  const conf = computeConfidence(p, { gds, tds });
+  renderConfidence(conf);
+  buildBrokerOpener(p, { maxPrice: propVal, score: conf.score });
+}
+
+function getRefinanceChecklist(empType) {
+  const groups = [
+    { title: '📋 Identity', items: [
+      { name: 'Government-issued photo ID', why: 'Required to verify your identity.' },
+      { name: 'Recent mortgage statement', why: 'Confirms current balance, lender, and remaining term.' },
+      { name: 'Recent property tax bill', why: 'Used to verify property value and annual tax obligations.' },
+    ]},
+  ];
+  if (empType === 'salaried') {
+    groups.push({ title: '💼 Income', items: [
+      { name: 'T4 slips — most recent 2 years', why: 'Confirms employment income history.' },
+      { name: '2 most recent pay stubs', why: 'Verifies current income.' },
+      { name: 'Letter of employment', why: 'Confirms current role, salary, and status.' },
+    ]});
+  } else if (empType === 'self_employed') {
+    groups.push({ title: '💼 Income', items: [
+      { name: 'T1 General returns — most recent 2 years', why: 'Lenders qualify based on NOA income.' },
+      { name: 'Notices of Assessment — most recent 2 years', why: 'Lenders average the two most recent years.' },
+      { name: 'Business financial statements — 2 years', why: 'Required if incorporated.' },
+    ]});
+  }
+  groups.push({ title: '🏠 Property', items: [
+    { name: 'Recent property appraisal (if available)', why: 'Helps confirm current market value for LTV calculation.' },
+    { name: 'Home insurance confirmation', why: 'Lenders require proof of active coverage.' },
+  ]});
+  return groups;
+}
+
+function buildPurchaseReport(p) {
+  const STRESS = 0.0525;
+  const RATE   = 0.055;
+  const N      = 300; // 25yr * 12
+
+  const annualIncome = (p.familyIncome||p.grossIncome||0) + (p.otherIncome||0);
+  const monthlyIncome = annualIncome / 12;
+
+  const monthlyDebts =
+    (p.carLoanMonthly||0) +
+    (p.studentLoanMonthly||0) +
+    (p.creditCardBalance ? (p.creditCardBalance * 0.03) : 0) +
+    (p.locBalance ? (p.locBalance * 0.01) : 0);
+
+  const maxHsgGDS = monthlyIncome * 0.32;
+  const maxHsgTDS = (monthlyIncome * 0.44) - monthlyDebts;
+  const maxPayment = Math.max(0, Math.min(maxHsgGDS, maxHsgTDS) * 0.82);
+
+  const r = STRESS / 12;
+  const maxMortgage = maxPayment * ((1 - Math.pow(1 + r, -N)) / r);
+  const maxPrice    = maxMortgage + (p.downPayment||0);
+  const low         = maxPrice * 0.88;
+  const high        = maxPrice * 1.06;
+
+  // Actual ratios for target price
+  const tgtPrice = p.propertyPrice || maxPrice;
+  const mortgage = Math.max(0, tgtPrice - (p.downPayment||0));
+  const mr = RATE / 12;
+  const mPmt = mortgage * (mr * Math.pow(1+mr, N)) / (Math.pow(1+mr, N)-1);
+  const hsg  = mPmt + tgtPrice * 0.008/12 + 200;
+  const gds  = monthlyIncome > 0 ? hsg / monthlyIncome : 0;
+  const tds  = monthlyIncome > 0 ? (hsg + monthlyDebts) / monthlyIncome : 0;
+
+  // ── Range card
+  setText('r-amount', fmt(Math.round(maxPrice / 5000) * 5000));
+  const rangeSpanExtra = p.firstTimeBuyer ? ' · First-time buyer' : '';
+  setText('r-span', (p.coApplicant ? 'Combined household income' : 'Individual income') + ' · Unverified estimate' + rangeSpanExtra);
+  setText('r-low', fmt(Math.round(low / 5000) * 5000));
+  setText('r-high', fmt(Math.round(high / 5000) * 5000));
+  setTimeout(() => { document.getElementById('r-bar').style.width = Math.min(maxPrice / 1500000 * 100, 100) + '%'; }, 150);
+
+  // Insight
+  let insight;
+  if (monthlyDebts > monthlyIncome * 0.12) {
+    insight = `Your existing debt payments ($${fmtNum(Math.round(monthlyDebts))}/month) are the primary constraint on your range. Reducing these before applying could increase your qualifying amount meaningfully.`;
+  } else if ((p.downPayment||0) < tgtPrice * 0.2) {
+    insight = `Your down payment is below 20% of your target price, which means CMHC mortgage insurance applies. Increasing your down payment to 20% would reduce your total borrowing cost.`;
+  } else {
+    insight = `Your income-to-debt ratio is healthy. Your down payment and income are the main factors driving your range.`;
+  }
+  setText('r-insight', insight);
+
+  // ── First-time buyer callout
+  if (p.firstTimeBuyer) {
+    const ftbEl = document.getElementById('scenarios-card');
+    const ftbNote = document.createElement('div');
+    ftbNote.style.cssText = 'margin-top:12px; padding:12px 14px; background:var(--green-light); border-radius:6px; font-size:12px; color:#00805f; line-height:1.7;';
+    ftbNote.innerHTML = '<strong>First-time buyer benefits available:</strong> You may be eligible for the RRSP Home Buyers' Plan (up to $35,000 tax-free), the First Home Savings Account (FHSA), and a land transfer tax rebate. Ask your broker to factor these into your plan.';
+    if (ftbEl && !document.getElementById('ftb-note')) {
+      ftbNote.id = 'ftb-note';
+      ftbEl.querySelector('.card-body').appendChild(ftbNote);
+    }
+  }
+
+  // ── Rate context
+  buildRateContext(p, { maxMortgage, maxPrice });
+
+  // ── Ratios
+  setRatio('r-gds', 'r-gds-pill', 'r-gds-track', gds, 0.32, 0.39);
+  setRatio('r-tds', 'r-tds-pill', 'r-tds-track', tds, 0.44, 0.48);
+
+  // ── Scenarios
+  const scenarios = [];
+  if ((p.carLoanMonthly||0) > 0) {
+    const gain = (p.carLoanMonthly * 12) / 0.44;
+    scenarios.push({ icon: '🚗', title: 'Pay off car loan', desc: 'Eliminating monthly car payments frees up TDS ratio room.', gain: '+' + fmt(gain) });
+  }
+  if ((p.creditCardBalance||0) > 0) {
+    const gain = (p.creditCardBalance * 0.03 * 12) / 0.44;
+    scenarios.push({ icon: '💳', title: 'Pay down credit card', desc: 'Lower credit card balance reduces monthly minimum payments factored into your ratios.', gain: '+' + fmt(gain) });
+  }
+  if ((p.downPayment||0) < tgtPrice * 0.2 && tgtPrice > 0) {
+    const cmhc = Math.round(mortgage * 0.031 / 1000) * 1000;
+    scenarios.push({ icon: '💰', title: 'Increase down payment to 20%', desc: 'Avoids CMHC insurance premium and reduces total mortgage amount.', gain: 'Save ~' + fmt(cmhc) });
+  }
+
+  const sl = document.getElementById('scenarios-list');
+  if (scenarios.length === 0) {
+    document.getElementById('scenarios-card').style.display = 'none';
+  } else {
+    sl.innerHTML = scenarios.map(s => `
+      <div class="scenario-row">
+        <div class="scenario-icon-wrap">${s.icon}</div>
+        <div class="scenario-body">
+          <div class="scenario-title">${s.title}</div>
+          <div class="scenario-desc">${s.desc}</div>
+        </div>
+        <div class="scenario-gain">${s.gain}</div>
+      </div>`).join('');
+  }
+
+  // ── Checklist
+  const groups = buildChecklist(p.employmentType, p.downPaymentSource);
+  document.getElementById('doc-list').innerHTML = groups.map(g => `
+    <div class="doc-section">
+      <div class="doc-section-title">${g.title}</div>
+      ${g.items.map(item => `
+        <div class="doc-row">
+          <div class="doc-checkbox" onclick="tick(this)"></div>
+          <div>
+            <div class="doc-title">${item.name}</div>
+            <div class="doc-why">${item.why}</div>
+          </div>
+        </div>`).join('')}
+    </div>`).join('');
+
+  // ── Broker brief
+  buildBrokerBrief(p, { gds, tds, maxPrice, monthlyDebts, monthlyIncome });
+  const conf = computeConfidence(p, { gds, tds });
+  renderConfidence(conf);
+  buildBrokerOpener(p, { maxPrice, score: conf.score });
+}
+
+function setRatio(valId, pillId, trackId, ratio, goodLimit, warnLimit) {
+  setText(valId, (ratio * 100).toFixed(1) + '%');
+  const pillEl = document.getElementById(pillId);
+  const trackEl = document.getElementById(trackId);
+  const pct = Math.min(ratio / (goodLimit * 1.5) * 100, 100);
+  setTimeout(() => { trackEl.style.width = pct + '%'; }, 300);
+  if (ratio <= goodLimit) {
+    pillEl.className = 'ratio-pill pill-good';
+    pillEl.textContent = '✓ Within limit';
+    trackEl.className = 'ratio-track-fill track-good';
+  } else if (ratio <= warnLimit) {
+    pillEl.className = 'ratio-pill pill-warn';
+    pillEl.textContent = '⚠ Approaching limit';
+    trackEl.className = 'ratio-track-fill track-warn';
+  } else {
+    pillEl.className = 'ratio-pill pill-bad';
+    pillEl.textContent = '✗ Over limit';
+    trackEl.className = 'ratio-track-fill track-bad';
+  }
+}
+
+function buildChecklist(empType, dpSource) {
+  const groups = [
+    {
+      title: '📋 Identity',
+      items: [
+        { name: 'Government-issued photo ID', why: 'Required to verify your identity.' },
+        { name: 'Social Insurance Number', why: 'Needed to pull your credit report with your consent.' }
+      ]
+    }
+  ];
+
+  if (empType === 'salaried') {
+    groups.push({ title: '💼 Employment & Income', items: [
+      { name: 'T4 slips — most recent 2 years', why: 'Confirms employment income history. Lenders require 2 years to assess stability.' },
+      { name: '2 most recent pay stubs', why: 'Verifies your current income is consistent with your T4.' },
+      { name: 'Letter of employment', why: 'Confirms your role, salary, and status. Must be on company letterhead, dated within 30 days.' }
+    ]});
+  } else if (empType === 'self_employed') {
+    groups.push({ title: '💼 Self-Employment Income', items: [
+      { name: 'T1 General returns — most recent 2 years', why: 'Lenders use your NOA income, not your stated income.' },
+      { name: 'Notices of Assessment (NOA) — most recent 2 years', why: 'Lenders typically average the two most recent years.' },
+      { name: 'Business financial statements — 2 years', why: 'If incorporated, lenders review business financials alongside personal income.' },
+      { name: 'Proof of business ownership', why: 'Registration or articles of incorporation confirming active ownership.' }
+    ]});
+  } else {
+    groups.push({ title: '💼 Contract Income', items: [
+      { name: 'Current contract(s) showing rate and term', why: 'Lenders need to verify active income and assess renewal pattern.' },
+      { name: 'T4 or T4A — most recent 2 years', why: 'Confirms income history.' },
+      { name: '3 months of bank statements showing deposits', why: 'Verifies consistent receipt of contract income.' }
+    ]});
+  }
+
+  const dpItems = [
+    { name: '90-day bank/investment statements', why: 'Lenders require a 90-day history to verify the source of your down payment.' }
+  ];
+  if (dpSource === 'gift') dpItems.push({ name: 'Gift letter from donor', why: 'Must confirm amount, relationship, and that no repayment is required.' });
+  if (dpSource === 'rrsp') dpItems.push({ name: "RRSP Home Buyers' Plan withdrawal confirmation", why: 'Documents the HBP withdrawal amount.' });
+  groups.push({ title: '🏦 Down Payment', items: dpItems });
+
+  return groups;
+}
+
+
+
+// ════════════════════════════════════════
+// INTEGRATION PLACEHOLDERS
+// ════════════════════════════════════════
+const verifyState = { ws: false, cra: false, credit: false };
+
+function simulateWSConnect() {
+  const btn = document.getElementById('landing-ws-btn');
+  const banner = document.getElementById('landing-ws-banner');
+  btn.textContent = 'Connecting...';
+  btn.disabled = true;
+  setTimeout(() => {
+    btn.textContent = '✓ Connected';
+    btn.classList.add('connected');
+    banner.querySelector('.ws-connect-sub').textContent =
+      'Account connected. Down payment and savings data will be pre-filled during intake.';
+    verifyState.ws = true;
+  }, 900);
+}
+
+function simulateVerify(type, el) {
+  if (verifyState[type]) return;
+  const labels = {
+    ws:     ['Connecting to Wealthsimple...', '✓ Connected', 'Savings & RRSP data loaded'],
+    cra:    ['Connecting to CRA...', '✓ Verified', 'NOA income confirmed · 2-yr avg loaded'],
+    credit: ['Pulling credit report...', '✓ Connected', 'Soft pull complete · Score loaded'],
+  };
+  const [loading, done, desc] = labels[type];
+  el.querySelector('.verify-btn-action').textContent = loading;
+  el.querySelector('.verify-btn-desc').textContent = 'Please wait...';
+
+  setTimeout(() => {
+    verifyState[type] = true;
+    el.classList.add('connected');
+    el.querySelector('.verify-btn-icon').textContent = '✓';
+    el.querySelector('.verify-btn-action').textContent = done;
+    el.querySelector('.verify-btn-desc').textContent = desc;
+
+    // Boost confidence score for each connected source
+    const boosts = { ws: 5, cra: 18, credit: 10 };
+    const boost = boosts[type];
+    const currentScore = parseInt(document.getElementById('conf-score')?.textContent) || 0;
+    const newScore = Math.min(100, currentScore + boost);
+    updateConfidenceDial(newScore);
+
+    // Update broker brief verification status
+    updateBrokerVerification();
+  }, 1200);
+}
+
+function updateConfidenceDial(newScore) {
+  const scoreEl = document.getElementById('conf-score');
+  const arcEl = document.getElementById('conf-arc');
+  if (!scoreEl || !arcEl) return;
+
+  const old = parseInt(scoreEl.textContent) || 0;
+  const step = newScore > old ? 1 : -1;
+  let cur = old;
+  const interval = setInterval(() => {
+    cur += step;
+    scoreEl.textContent = cur;
+    const offset = 220 - (cur / 100) * 220;
+    arcEl.style.strokeDashoffset = offset;
+    arcEl.style.stroke = cur >= 90 ? '#00a67e' : cur >= 75 ? '#d4760c' : '#c0392b';
+    if (cur === newScore) clearInterval(interval);
+  }, 18);
+
+  // Update verdict text
+  const verdictEl = document.getElementById('conf-verdict');
+  const subEl = document.getElementById('conf-sub');
+  if (verdictEl && subEl) {
+    if (newScore >= 90) {
+      verdictEl.textContent = 'High confidence';
+      subEl.textContent = 'Verified data sources connected. Broker can proceed to lender submission with minimal clarification.';
+    } else if (newScore >= 75) {
+      verdictEl.textContent = 'Moderate confidence';
+      subEl.textContent = 'Good progress. Connect remaining data sources to further strengthen your file.';
+    }
+  }
+}
+
+function updateBrokerVerification() {
+  const escEl = document.getElementById('b-escalation');
+  if (!escEl) return;
+  const connected = Object.entries(verifyState).filter(([,v]) => v).map(([k]) => ({
+    ws: 'Wealthsimple account', cra: 'CRA My Account (NOA verified)', credit: 'Credit bureau (soft pull)'
+  }[k]));
+  if (connected.length > 0) {
+    const existing = escEl.innerHTML;
+    const verifiedHtml = `<div style="margin-top:10px; padding:10px 14px; background:var(--green-light); border-radius:var(--radius-sm); font-size:12px; color:#00805f; border:1px solid #a0dece;">
+      ✓ <strong>Verified data sources:</strong> ${connected.join(' · ')}
+    </div>`;
+    if (!escEl.innerHTML.includes('Verified data sources')) {
+      escEl.innerHTML += verifiedHtml;
+    } else {
+      const div = escEl.querySelector('[style*="green-light"]');
+      if (div) div.innerHTML = `✓ <strong>Verified data sources:</strong> ${connected.join(' · ')}`;
+    }
+  }
+}
+
+// ════════════════════════════════════════
+// CONFIDENCE SCORE ENGINE
+// ════════════════════════════════════════
+function computeConfidence(p, calc) {
+  let score = 100;
+  const factors = [];
+  const escalationReasons = [];
+
+  // Income verification risk
+  if (p.employmentType === 'self_employed') {
+    score -= 15;
+    factors.push({ label: 'Self-employed income — harder to verify', delta: -15 });
+    escalationReasons.push('Self-employed income requires NOA verification and 2-year average calculation');
+  }
+  if (p.employmentType === 'contract') {
+    score -= 10;
+    factors.push({ label: 'Contract employment — lender treatment varies', delta: -10 });
+    escalationReasons.push('Contract income qualification varies by lender — broker judgment required');
+  }
+  if (p.hasVariableIncome) {
+    score -= 10;
+    factors.push({ label: 'Variable income reported', delta: -10 });
+    escalationReasons.push('Variable income may be averaged over 2 years by lenders');
+  }
+
+  // Debt ratio risk
+  if (calc.tds > 0.44) {
+    score -= 20;
+    factors.push({ label: 'TDS ratio exceeds lender limit', delta: -20 });
+    escalationReasons.push('TDS above 44% — qualifying amount may need to be revised down significantly');
+  } else if (calc.tds > 0.40) {
+    score -= 10;
+    factors.push({ label: 'TDS ratio approaching limit (>' + (calc.tds*100).toFixed(0) + '%)', delta: -10 });
+  }
+  if (calc.gds > 0.32) {
+    score -= 10;
+    factors.push({ label: 'GDS ratio exceeds lender limit', delta: -10 });
+    escalationReasons.push('GDS above 32% — housing cost ratio needs review');
+  }
+
+  // Down payment risk
+  if (p.intent !== 'refinance') {
+    if (p.downPaymentSource === 'gift') {
+      score -= 5;
+      factors.push({ label: 'Gifted down payment — gift letter required', delta: -5 });
+      escalationReasons.push('Gifted down payment requires signed gift letter confirming no repayment');
+    }
+    if ((p.downPayment||0) > 0 && (p.propertyPrice||0) > 0 && p.downPayment / p.propertyPrice < 0.10) {
+      score -= 5;
+      factors.push({ label: 'Low down payment — CMHC insurance applies', delta: -5 });
+    }
+  }
+
+  // Self-employment tenure
+  if (p.selfEmployedYears !== null && p.selfEmployedYears < 2) {
+    score -= 10;
+    factors.push({ label: 'Self-employed under 2 years — most lenders require minimum 2', delta: -10 });
+    escalationReasons.push('Less than 2 years self-employment significantly limits lender options');
+  }
+
+  // Positive factors
+  if (calc.tds <= 0.35 && calc.gds <= 0.28) {
+    score = Math.min(score + 5, 100);
+    factors.push({ label: 'Strong debt ratios — well within limits', delta: 5 });
+  }
+  if (p.intent !== 'refinance' && (p.downPayment||0) > 0 && (p.propertyPrice||0) > 0 && p.downPayment / p.propertyPrice >= 0.20) {
+    score = Math.min(score + 5, 100);
+    factors.push({ label: '20%+ down payment — no CMHC insurance required', delta: 5 });
+  }
+
+  score = Math.max(0, Math.min(100, score));
+
+  let verdict, sub, escalate;
+  if (score >= 90) {
+    verdict = 'High confidence';
+    sub = 'This file is well-structured. A broker can likely proceed to lender submission with minimal clarification.';
+    escalate = false;
+  } else if (score >= 75) {
+    verdict = 'Moderate confidence';
+    sub = 'A few items need broker verification before proceeding. Review flagged factors below.';
+    escalate = escalationReasons.length > 0;
+  } else {
+    verdict = 'Low confidence — broker review required';
+    sub = 'Multiple factors reduce confidence in this estimate. Do not share a qualifying range with the client until a broker has reviewed the full file.';
+    escalate = true;
+  }
+
+  return { score, factors, verdict, sub, escalate, escalationReasons };
+}
+
+function renderConfidence(conf) {
+  // Score dial
+  const scoreEl = document.getElementById('conf-score');
+  const arcEl = document.getElementById('conf-arc');
+  if (scoreEl) scoreEl.textContent = conf.score;
+
+  // Animate arc — circumference is 2π×35 ≈ 220
+  const offset = 220 - (conf.score / 100) * 220;
+  const color = conf.score >= 90 ? '#00a67e' : conf.score >= 75 ? '#d4760c' : '#c0392b';
+  setTimeout(() => {
+    if (arcEl) {
+      arcEl.style.strokeDashoffset = offset;
+      arcEl.style.stroke = color;
+    }
+  }, 200);
+
+  if (document.getElementById('conf-verdict')) {
+    document.getElementById('conf-verdict').textContent = conf.verdict;
+    document.getElementById('conf-sub').textContent = conf.sub;
+  }
+
+  const factorsEl = document.getElementById('conf-factors');
+  if (factorsEl) {
+    factorsEl.innerHTML = conf.factors.map(f => `
+      <div class="confidence-factor">
+        <span>${f.label}</span>
+        <span class="confidence-factor-delta ${f.delta < 0 ? 'delta-neg' : f.delta > 0 ? 'delta-pos' : 'delta-neu'}">
+          ${f.delta > 0 ? '+' : ''}${f.delta}
+        </span>
+      </div>`).join('');
+  }
+
+  // Escalation block in broker tab
+  const escEl = document.getElementById('b-escalation');
+  if (escEl) {
+    const badge = conf.escalate
+      ? `<div class="escalation-badge escalation-yes">⚠ Human escalation required</div>`
+      : `<div class="escalation-badge escalation-no">✓ No escalation required</div>`;
+    const reasons = conf.escalationReasons.length > 0
+      ? `<div class="escalation-reasons"><strong>Triggered by:</strong><br>${conf.escalationReasons.map(r => '· ' + r).join('<br>')}</div>`
+      : `<div class="escalation-reasons">File is within normal parameters. Broker review is standard — no additional escalation flags.</div>`;
+    escEl.innerHTML = badge + reasons;
+  }
+}
+
+function buildBrokerBrief(p, calc) {
+  const rows = (data) => data.map(([k, v]) =>
+    `<div class="data-row"><span class="data-key">${k}</span><span class="data-val">${v}</span></div>`
+  ).join('');
+
+  const isRefi = p.intent === 'refinance';
+
+  // Profile rows — branch on intent
+  const profileRows = [
+    ['Intent', isRefi ? 'Refinance' : 'Purchase'],
+    ['Primary applicant', p.primaryName || '—'],
+    ...(p.coApplicant && p.coApplicantName ? [['Co-applicant', p.coApplicantName]] : []),
+    ['Email', p.email || '—'],
+    ['Phone', p.phone || '—'],
+    ['Wealthsimple client', p.wsClient ? 'Yes — account data pre-filled' : 'No — self-reported'],
+    ['Employment type', (p.employmentType||'—').replace('_', '-')],
+    ['Combined household income', fmt(p.familyIncome||p.grossIncome)],
+    ['Co-applicant on application', p.coApplicant ? 'Yes' : 'No'],
+    ['Other income', p.otherIncome > 0 ? fmt(p.otherIncome) : 'None reported'],
+    ['Car loan (monthly)', p.carLoanMonthly > 0 ? '$' + fmtNum(p.carLoanMonthly) : 'None'],
+    ['Student loan (monthly)', p.studentLoanMonthly > 0 ? '$' + fmtNum(p.studentLoanMonthly) : 'None'],
+    ['Credit card balance', p.creditCardBalance > 0 ? fmt(p.creditCardBalance) : 'None'],
+    ['Line of credit balance', p.locBalance > 0 ? fmt(p.locBalance) : 'None'],
+  ];
+
+  if (isRefi) {
+    profileRows.push(['Current property value', fmt(p.propertyValue)]);
+    profileRows.push(['Current mortgage balance', fmt(p.currentMortgageBalance)]);
+    profileRows.push(['Current interest rate', (p.currentRate || '—') + '%']);
+    profileRows.push(['Amortisation remaining', (p.amortisationRemaining || '—') + ' years']);
+    profileRows.push(['Current lender', p.currentLender || '—']);
+    profileRows.push(['Term remaining', (p.termRemaining||'—').replace(/_/g,' ')]);
+    profileRows.push(['Reason for refinancing', (p.refinanceReason||'—').replace(/_/g,' ')]);
+    if (p.equityUse) profileRows.push(['Equity use purpose', p.equityUse.replace(/_/g,' ')]);
+  } else {
+    profileRows.push(['First-time buyer', p.firstTimeBuyer ? 'Yes' : 'No']);
+    profileRows.push(['Property type', (p.propertyType||'—').replace(/_/g,' ')]);
+    profileRows.push(['Buying stage', (p.buyingStage||'—').replace(/_/g,' ')]);
+    profileRows.push(['Timeline', (p.timeline||'—').replace(/_/g,' ')]);
+    profileRows.push(['Down payment', fmt(p.downPayment) + (p.downPaymentSource ? ` (${p.downPaymentSource})` : '')]);
+    profileRows.push(['Target property price', fmt(p.propertyPrice)]);
+  }
+
+  document.getElementById('b-profile').innerHTML = rows(profileRows);
+
+  document.getElementById('b-ratios').innerHTML = rows([
+    ['GDS ratio', (calc.gds * 100).toFixed(2) + '% (limit 32%)'],
+    ['TDS ratio', (calc.tds * 100).toFixed(2) + '% (limit 44%)'],
+    ['Stress test rate applied', '5.25% or contract rate + 2%'],
+    [isRefi ? 'Home equity estimate' : 'Estimated max qualifying price', fmt(calc.maxPrice)],
+    ['Total monthly debt obligations', '$' + fmtNum(Math.round(calc.monthlyDebts))],
+    ['Monthly gross income', '$' + fmtNum(Math.round(calc.monthlyIncome))],
+  ]);
+
+  const flags = [];
+  if (p.employmentType === 'self_employed') flags.push('Self-employed client. Verify 2-year NOA average. Request business financials. Stated income may differ from qualifying income.');
+  if (p.employmentType === 'contract') flags.push('Contract employment. Confirm T4A vs T4, renewal history, and whether lender accepts as qualifying income.');
+  if (!isRefi && p.downPaymentSource === 'gift') flags.push('Gifted down payment. Gift letter required confirming no repayment obligation.');
+  if (p.hasVariableIncome) flags.push('Client reported variable or inconsistent income. Lenders may use a 2-year average — clarify expected qualifying income.');
+  if (calc.tds > 0.40) flags.push(`Elevated TDS ratio (${(calc.tds*100).toFixed(1)}%). Client may have unrealistic expectations. Recommend addressing early in the call.`);
+  if (!isRefi && (p.downPayment||0) > 0 && (p.propertyPrice||0) > 0 && p.downPayment / p.propertyPrice < 0.05) flags.push('Down payment appears below the 5% minimum required. Confirm purchase price and available funds.');
+  if (isRefi && p.propertyValue > 0 && p.currentMortgageBalance / p.propertyValue > 0.80) flags.push('LTV exceeds 80%. Refinance options may be limited — some lenders require mortgage insurance above this threshold.');
+
+  const flagsEl = document.getElementById('b-flags');
+  const flagsCard = document.getElementById('b-flags-card');
+  if (flags.length === 0) {
+    if (flagsCard) flagsCard.style.display = 'none';
+  } else {
+    if (flagsCard) flagsCard.style.display = 'block';
+    flagsEl.innerHTML = flags.map(f => `<div class="flag-row">⚠ <span>${f}</span></div>`).join('');
+  }
+
+  const clientName = p.primaryName && p.primaryName !== 'unknown' ? p.primaryName : 'Client';
+  document.getElementById('b-told').innerHTML = isRefi
+    ? `${clientName} was informed this is an unverified refinance assessment only — not a commitment to lend. A licensed broker will review their file before any decision is made.`
+    : `${clientName} was informed this assessment is not a pre-approval and that they should not make an offer on a property until receiving written confirmation from a licensed broker. Estimated qualifying range of <strong>${fmt(Math.round(calc.maxPrice * 0.88 / 5000) * 5000)} – ${fmt(Math.round(calc.maxPrice * 1.06 / 5000) * 5000)}</strong> was provided with plain-language explanation of the constraints driving it.`;
+}
+
+
+// ════════════════════════════════════════
+// RATE CONTEXT
+// ════════════════════════════════════════
+function buildRateContext(p, calc) {
+  const el = document.getElementById('rate-context-text');
+  if (!el) return;
+  const isRefi = p.intent === 'refinance';
+  const mortgageAmt = fmt(Math.round((calc.maxMortgage || calc.maxPrice * 0.8) / 5000) * 5000);
+
+  let html = '';
+  if (isRefi) {
+    html = `Based on current Canadian market conditions, 5-year fixed rates are broadly in the <strong>4.7–5.4%</strong> range and variable rates around <strong>prime minus 0.5–1%</strong> (prime currently ~6.45%). Your broker will confirm the exact rate available for your profile, lender, and term.`;
+    if (p.termRemaining === 'over_18mo') {
+      html += ` Given your remaining term, your broker will also calculate the prepayment penalty from <strong>${p.currentLender || 'your lender'}</strong> to confirm whether breaking early makes financial sense.`;
+    }
+  } else {
+    html = `Based on current Canadian market conditions, 5-year fixed rates are broadly in the <strong>4.7–5.4%</strong> range. On a mortgage of approximately <strong>${mortgageAmt}</strong>, this would translate to a monthly payment in the range of <strong>${fmt(Math.round(calc.maxMortgage * 0.0055))} – ${fmt(Math.round(calc.maxMortgage * 0.0062))}</strong>. Your broker will confirm the exact rate available for your profile.`;
+    if (p.firstTimeBuyer) {
+      html += ` As a first-time buyer, you may also be eligible for the FHSA tax deduction and RRSP Home Buyers' Plan — ask your broker to incorporate these into your plan.`;
+    }
+  }
+  el.innerHTML = html;
+}
+
+// ════════════════════════════════════════
+// BROKER OPENER GENERATOR
+// ════════════════════════════════════════
+function buildBrokerOpener(p, calc) {
+  const el = document.getElementById('b-opener');
+  if (!el) return;
+
+  const name = p.primaryName && p.primaryName !== 'unknown' ? p.primaryName : 'This client';
+  const isRefi = p.intent === 'refinance';
+
+  let opener = '';
+
+  if (isRefi) {
+    const termCtx = {
+      at_renewal: 'is at renewal — no prepayment penalty applies, ideal timing to act',
+      under_6mo: 'has under 6 months remaining — worth discussing whether to wait for renewal',
+      '6_18mo': 'has 6–18 months remaining on their term — broker should calculate IRD penalty before proceeding',
+      over_18mo: 'has over 18 months remaining — prepayment penalty likely significant, confirm with lender',
+    }[p.termRemaining] || 'term details on file';
+
+    const reasonCtx = {
+      lower_rate: 'looking to reduce their rate and monthly payment',
+      access_equity: `looking to access equity${p.equityUse ? ' for ' + p.equityUse.replace(/_/g,' ') : ''}`,
+      consolidate_debt: 'looking to consolidate existing debt into their mortgage',
+      other: 'refinancing for personal reasons',
+    }[p.refinanceReason] || 'refinancing';
+
+    opener = `${name} is refinancing with ${p.currentLender || 'their current lender'} and ${termCtx}. They are ${reasonCtx}. LTV is ${((p.currentMortgageBalance||0)/(p.propertyValue||1)*100).toFixed(1)}% — ${p.propertyValue && p.currentMortgageBalance && (p.currentMortgageBalance/p.propertyValue) < 0.8 ? 'within the 80% refinance threshold' : 'approaching or exceeding the 80% threshold, review options carefully'}. Confidence score is ${calc.score||'—'}/100. Open by confirming their goal and walking through the penalty calculation before discussing product options.`;
+
+  } else {
+    const stageCtx = {
+      exploring: 'still in the early planning stage',
+      actively_looking: 'actively viewing properties',
+      offer_accepted: 'has an accepted offer — time-sensitive',
+    }[p.buyingStage] || 'in the buying process';
+
+    const timelineCtx = {
+      '0_3mo': 'within the next 3 months',
+      '3_6mo': 'in the next 3–6 months',
+      '6_12mo': 'in the next 6–12 months',
+      planning: 'in the longer-term planning stage',
+    }[p.timeline] || '';
+
+    const ftb = p.firstTimeBuyer ? ' First-time buyer — FHSA, HBP, and LTT rebate eligibility should be discussed.' : '';
+
+    opener = `${name} is ${stageCtx}, looking to buy ${timelineCtx}. They are targeting a ${(p.propertyType||'property').replace(/_/g,' ')} in the ${fmt(Math.round((calc.maxPrice||0)*0.88/5000)*5000)} – ${fmt(Math.round((calc.maxPrice||0)*1.06/5000)*5000)} range with a ${fmt(p.downPayment||0)} down payment${p.downPaymentSource ? ' (' + p.downPaymentSource + ')' : ''}. Confidence score is ${calc.score||'—'}/100.${ftb} Open by confirming their timeline and whether they have a specific property in mind — this shapes how urgently the file needs to move.`;
+  }
+
+  el.textContent = opener;
+}
+
+// ════════════════════════════════════════
+// FOLLOW-UP CHAT
+// ════════════════════════════════════════
+async function sendFollowup() {
+  const input = document.getElementById('followup-input');
+  const text = input.value.trim();
+  if (!text) return;
+  input.value = '';
+
+  const inner = document.getElementById('followup-inner');
+
+  // User bubble
+  const userDiv = document.createElement('div');
+  userDiv.style.cssText = 'align-self:flex-end; background:var(--black); color:var(--white); padding:8px 12px; border-radius:12px 12px 2px 12px; font-size:13px; max-width:85%; line-height:1.5;';
+  userDiv.textContent = text;
+  inner.appendChild(userDiv);
+  inner.scrollTop = inner.scrollHeight;
+
+  // Typing indicator
+  const typingDiv = document.createElement('div');
+  typingDiv.style.cssText = 'align-self:flex-start; background:var(--off-white); padding:8px 12px; border-radius:12px 12px 12px 2px; font-size:13px; color:var(--gray-400);';
+  typingDiv.textContent = 'Thinking...';
+  inner.appendChild(typingDiv);
+  inner.scrollTop = inner.scrollHeight;
+
+  try {
+    // Build context from the profile for the follow-up system prompt
+    const profileSummary = JSON.stringify(S.profile || {});
+    const followupSystem = `You are a helpful mortgage assistant for Wealthsimple. The user has just completed their mortgage readiness assessment. Here is their profile data: ${profileSummary}. Answer their question about their assessment in plain language, 2-4 sentences. Do not recommend specific lenders or rates. Do not call this a pre-approval. If a question requires a licensed broker's judgment, say so clearly and encourage them to book a call.`;
+
+    const res = await fetch('/.netlify/functions/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system: followupSystem,
+        messages: [{ role: 'user', content: text }]
+      })
+    });
+    const data = await res.json();
+    const reply = data.content?.[0]?.text || 'I wasn't able to answer that — please book a broker call for detailed questions.';
+    typingDiv.style.color = 'var(--gray-700)';
+    typingDiv.textContent = reply;
+  } catch(e) {
+    typingDiv.textContent = 'Something went wrong. Please try again or book a broker call.';
+  }
+  inner.scrollTop = inner.scrollHeight;
+}
+
+// ════════════════════════════════════════
+// TABS
+// ════════════════════════════════════════
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach((b, i) => {
+    b.classList.toggle('active', (tab === 'user' && i === 0) || (tab === 'broker' && i === 1));
+  });
+  document.getElementById('tab-user').style.display  = tab === 'user'   ? 'block' : 'none';
+  document.getElementById('tab-broker').style.display = tab === 'broker' ? 'block' : 'none';
+}
+
+// ════════════════════════════════════════
+// CALENDAR
+// ════════════════════════════════════════
+function pickSlot(el) {
+  document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+  el.classList.add('selected');
+  const btn = document.getElementById('confirm-btn');
+  btn.disabled = false;
+  btn.textContent = 'Confirm booking →';
+}
+
+function confirmSlot() {
+  const btn = document.getElementById('confirm-btn');
+  btn.textContent = '✓ Booked — a broker will call you at the selected time';
+  btn.disabled = true;
+  btn.style.background = 'var(--green)';
+}
+
+// ════════════════════════════════════════
+// UTILS
+// ════════════════════════════════════════
+function setText(id, val) {
+  const el = document.getElementById(id);
+  if (el) el.textContent = val;
+}
+
+function tick(el) {
+  el.classList.toggle('ticked');
+  el.textContent = el.classList.contains('ticked') ? '✓' : '';
+}
+
+function fmtNum(n) {
+  return n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+function fmt(n) {
+  if (!n || isNaN(n) || n === 0) return '—';
+  if (n >= 1000000) return '$' + (n/1000000).toFixed(2) + 'M';
+  return '$' + fmtNum(Math.round(n));
+}
+</script>
+
+</body>
