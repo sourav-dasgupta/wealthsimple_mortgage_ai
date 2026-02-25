@@ -1335,6 +1335,154 @@ body {
   border-top: 1px solid var(--gray-100);
   line-height: 1.6;
 }
+
+/* ─── WS LOGIN MODAL ─── */
+.ws-modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  z-index: 1000;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(3px);
+}
+
+.ws-modal-overlay.active {
+  display: flex;
+}
+
+.ws-modal {
+  background: var(--white);
+  border-radius: 12px;
+  width: 100%;
+  max-width: 400px;
+  margin: 24px;
+  overflow: hidden;
+  box-shadow: 0 24px 60px rgba(0,0,0,0.18);
+}
+
+.ws-modal-header {
+  background: var(--black);
+  padding: 24px 28px 20px;
+}
+
+.ws-modal-logo {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: -0.01em;
+  margin-bottom: 8px;
+}
+
+.ws-modal-title {
+  font-size: 13px;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.5;
+}
+
+.ws-modal-body {
+  padding: 28px;
+}
+
+.ws-modal-field {
+  margin-bottom: 16px;
+}
+
+.ws-modal-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--gray-500);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.ws-modal-input {
+  width: 100%;
+  padding: 11px 14px;
+  border: 1px solid var(--gray-200);
+  border-radius: 7px;
+  font-size: 14px;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--black);
+  outline: none;
+  box-sizing: border-box;
+  transition: border-color 0.15s;
+}
+
+.ws-modal-input:focus {
+  border-color: var(--black);
+}
+
+.ws-modal-consent {
+  font-size: 11px;
+  color: var(--gray-400);
+  line-height: 1.6;
+  margin-bottom: 20px;
+  padding: 10px 12px;
+  background: var(--off-white);
+  border-radius: 6px;
+}
+
+.ws-modal-consent strong {
+  color: var(--gray-600);
+}
+
+.ws-modal-submit {
+  width: 100%;
+  background: var(--black);
+  color: var(--white);
+  border: none;
+  border-radius: 7px;
+  padding: 13px;
+  font-size: 14px;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.ws-modal-submit:hover { opacity: 0.85; }
+.ws-modal-submit:disabled { opacity: 0.5; cursor: default; }
+
+.ws-modal-cancel {
+  display: block;
+  text-align: center;
+  margin-top: 12px;
+  font-size: 12px;
+  color: var(--gray-400);
+  cursor: pointer;
+  background: none;
+  border: none;
+  width: 100%;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.ws-modal-cancel:hover { color: var(--gray-600); }
+
+.ws-modal-loading {
+  text-align: center;
+  padding: 32px 28px;
+}
+
+.ws-modal-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--gray-200);
+  border-top-color: var(--black);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.ws-modal-loading-text {
+  font-size: 13px;
+  color: var(--gray-500);
+}
 </style>
 </head>
 <body>
@@ -1786,7 +1934,10 @@ Collect in this order, one question at a time:
 8. Total combined household gross annual income before tax
 9. Any other household income? (rental, bonuses, child support) — allow "none"
 10. Monthly debt payments — car loan, then student loan, then credit card minimums, then line of credit. Each separately.
-11. Down payment — if wsClient=true and savings data is in history, say: "I can see you have $X in savings across your Wealthsimple accounts. Will you be using these funds for your down payment? Do you have any additional funds outside Wealthsimple?" Then ask source (savings / RRSP / gift / mix). If not WS client, ask normally.
+11. Down payment — ask in exactly this order, ONE question per message, never combined:
+    Step A: If wsClient=true, say "I can see you have $X in savings across your Wealthsimple accounts. Will you be using these funds for your down payment?" — wait for answer.
+    Step B: Ask "Do you have any additional savings outside of Wealthsimple to add?" — wait for answer. If they add more, note the total. If wsClient=false, ask "How much do you have saved for a down payment?" instead of steps A and B.
+    Step C: Ask "Where are these funds coming from — your savings, an RRSP withdrawal, a gift from family, or a mix?" — wait for answer.
 12. Target property price range
 13. Only if self-employed: years in business, income consistent year to year?
 
@@ -1855,44 +2006,70 @@ function handleWSClientAnswer(isClient) {
   if (isClient) {
     addUser("Yes, I'm a Wealthsimple client");
     S.history.push({ role: "user", content: "Yes, I'm a Wealthsimple client." });
+    // Show login modal
+    document.getElementById('ws-modal-overlay').classList.add('active');
+  } else {
+    addUser("No, I'm new to Wealthsimple");
+    S.history.push({ role: "user", content: "No, I'm not a Wealthsimple client. wsClient=false." });
+    sendMsg("No, I'm not a Wealthsimple client. Please start by asking for my full name.");
+  }
+}
+
+function closeWSModal() {
+  document.getElementById('ws-modal-overlay').classList.remove('active');
+  // Continue without account — treat as non-WS client
+  S.history.push({ role: "assistant", content: "No problem — let me ask you a few questions to get started." });
+  sendMsg("I prefer to continue without signing in. Please ask for my name.");
+}
+
+function submitWSLogin() {
+  const email = document.getElementById('ws-login-email').value;
+  const password = document.getElementById('ws-login-password').value;
+  if (!email || !password) return;
+
+  // Show loading state
+  document.getElementById('ws-modal-form-body').innerHTML = `
+    <div class="ws-modal-loading">
+      <div class="ws-modal-spinner"></div>
+      <div class="ws-modal-loading-text">Signing in and pulling your account data...</div>
+    </div>`;
+
+  setTimeout(() => {
+    // Simulate successful login + account data pull
+    const mockData = {
+      name: "Alex",
+      fullName: "Alex Chen",
+      email: "alex.chen@email.com",
+      phone: "416-555-0192",
+      rrsp: 28500,
+      tfsa: 41200,
+      cashSavings: 63000,
+      totalSavings: 92000
+    };
+    S.wsData = mockData;
+    S.wsConnected = true;
+
+    // Close modal
+    document.getElementById('ws-modal-overlay').classList.remove('active');
+
+    // Show connecting message in chat
     addAI("One moment while I pull up your account...");
+    S.history.push({ role: "assistant", content: "One moment while I pull up your account..." });
 
     setTimeout(() => {
-      // Simulated account data
-      const mockData = {
-        name: "Alex",
-        fullName: "Alex Chen",
-        email: "alex.chen@email.com",
-        phone: "416-555-0192",
-        rrsp: 28500,
-        tfsa: 41200,
-        cashSavings: 63000,
-        totalSavings: 92000
-      };
-      S.wsData = mockData;
-      S.wsConnected = true;
-
-      // Prime history with account data silently — AI uses it when asking about down payment
-      S.history.push({ role: "assistant", content: "One moment while I pull up your account..." });
+      // Prime history silently with account data
       S.history.push({
         role: "user",
-        content: "Account connected. Client name: " + mockData.fullName + ". Email: " + mockData.email + ". Phone: " + mockData.phone + ". Wealthsimple savings on file: RRSP $" + mockData.rrsp.toLocaleString() + ", TFSA $" + mockData.tfsa.toLocaleString() + ", cash savings $" + mockData.cashSavings.toLocaleString() + " — total $" + mockData.totalSavings.toLocaleString() + ". wsClient=true. Do NOT mention these details yet. Just greet them by first name and ask the co-applicant question."
+        content: "Account connected. Client name: " + mockData.fullName + ". Email: " + mockData.email + ". Phone: " + mockData.phone + ". Wealthsimple savings: RRSP $" + mockData.rrsp.toLocaleString() + ", TFSA $" + mockData.tfsa.toLocaleString() + ", cash savings $" + mockData.cashSavings.toLocaleString() + " — total $" + mockData.totalSavings.toLocaleString() + ". wsClient=true. Do NOT show these details yet. Greet by first name only and ask the co-applicant question."
       });
 
-      // Greet by name and go straight to co-applicant
       const greetMsg = "Hi " + mockData.name + "! Will you be applying for the mortgage on your own, or with a partner or spouse as a co-applicant?";
       S.history.push({ role: "assistant", content: greetMsg });
       addAI(greetMsg);
       addOptions(["On my own", "With a co-applicant"]);
+    }, 600);
 
-    }, 1000);
-
-  } else {
-    addUser("No, I'm new to Wealthsimple");
-    S.history.push({ role: "user", content: "No, I'm not a Wealthsimple client. wsClient=false." });
-    // Let AI take over — it will ask for name, email, phone, then co-applicant
-    sendMsg("No, I'm not a Wealthsimple client. Please start by asking for my full name.");
-  }
+  }, 1400);
 }
 
 
@@ -2961,5 +3138,34 @@ function fmt(n) {
   return '$' + fmtNum(Math.round(n));
 }
 </script>
+
+
+<!-- ══════════════════════════════════════════
+     WS LOGIN MODAL
+══════════════════════════════════════════ -->
+<div class="ws-modal-overlay" id="ws-modal-overlay">
+  <div class="ws-modal">
+    <div class="ws-modal-header">
+      <div class="ws-modal-logo">Wealthsimple</div>
+      <div class="ws-modal-title">Sign in to pre-fill your account details and skip several questions.</div>
+    </div>
+
+    <div class="ws-modal-body" id="ws-modal-form-body">
+      <div class="ws-modal-field">
+        <label class="ws-modal-label">Email</label>
+        <input class="ws-modal-input" type="email" id="ws-login-email" placeholder="you@email.com" value="alex.chen@email.com"/>
+      </div>
+      <div class="ws-modal-field">
+        <label class="ws-modal-label">Password</label>
+        <input class="ws-modal-input" type="password" id="ws-login-password" placeholder="••••••••" value="••••••••"/>
+      </div>
+      <div class="ws-modal-consent">
+        <strong>Data accessed:</strong> Account balances (RRSP, TFSA, savings), name, and contact info — to pre-fill your mortgage assessment. No transaction history or investment details will be accessed. You can revoke access at any time in your Wealthsimple settings.
+      </div>
+      <button class="ws-modal-submit" onclick="submitWSLogin()">Sign in and continue</button>
+      <button class="ws-modal-cancel" onclick="closeWSModal()">Continue without signing in</button>
+    </div>
+  </div>
+</div>
 
 </body>
