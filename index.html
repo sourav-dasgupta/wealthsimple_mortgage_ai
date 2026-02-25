@@ -2341,7 +2341,7 @@ function buildPurchaseReport(p) {
     const ftbEl = document.getElementById('scenarios-card');
     const ftbNote = document.createElement('div');
     ftbNote.style.cssText = 'margin-top:12px; padding:12px 14px; background:var(--green-light); border-radius:6px; font-size:12px; color:#00805f; line-height:1.7;';
-    ftbNote.innerHTML = '<strong>First-time buyer benefits available:</strong> You may be eligible for the RRSP Home Buyers' Plan (up to $35,000 tax-free), the First Home Savings Account (FHSA), and a land transfer tax rebate. Ask your broker to factor these into your plan.';
+    ftbNote.innerHTML = `<strong>First-time buyer benefits available:</strong> You may be eligible for the RRSP Home Buyers' Plan (up to $35,000 tax-free), the First Home Savings Account (FHSA), and a land transfer tax rebate. Ask your broker to factor these into your plan.`;
     if (ftbEl && !document.getElementById('ftb-note')) {
       ftbNote.id = 'ftb-note';
       ftbEl.querySelector('.card-body').appendChild(ftbNote);
@@ -2900,7 +2900,7 @@ async function sendFollowup() {
       })
     });
     const data = await res.json();
-    const reply = data.content?.[0]?.text || 'I wasn't able to answer that — please book a broker call for detailed questions.';
+    const reply = data.content?.[0]?.text || "I wasn't able to answer that — please book a broker call for detailed questions.";
     typingDiv.style.color = 'var(--gray-700)';
     typingDiv.textContent = reply;
   } catch(e) {
