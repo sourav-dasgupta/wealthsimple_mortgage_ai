@@ -2,7 +2,7 @@
 
 **A working prototype built for the Wealthsimple AI Builders application.**
 
-→ **[View live demo](https://your-site.netlify.app)** *(replace with your Netlify URL)*
+→ **[View live demo](https://wealthsimple-mortgage-ai-prototype.netlify.app)**
 
 ---
 
@@ -155,4 +155,4 @@ Then open `http://localhost:8888`
 
 ---
 
-*Built by [Your Name] — Wealthsimple AI Builders application, February 2026*
+*Built by [Sourav Dasgupta] — Wealthsimple AI Builders application, February 2026*
